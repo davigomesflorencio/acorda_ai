@@ -1,0 +1,56 @@
+package davi.android.alarmapp.worker.worker
+
+import android.Manifest
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import androidx.annotation.RequiresPermission
+import androidx.work.CoroutineWorker
+import androidx.work.WorkerParameters
+import davi.android.alarmapp.core.Constants
+import org.koin.core.component.KoinComponent
+import davi.android.alarmapp.receivers.AlarmReceiver
+import java.util.Calendar
+
+class AlarmWorker(
+    context: Context, workerParams: WorkerParameters
+) : CoroutineWorker(context, workerParams), KoinComponent {
+
+    private val notificationId = System.currentTimeMillis().toInt()
+
+    @RequiresPermission(Manifest.permission.VIBRATE)
+    override suspend fun doWork(): Result {
+        if (Thread.interrupted())
+            throw InterruptedException()
+
+        val action = inputData.getString("action")
+
+        if (action == Constants.ACTION_STOP_ALARM) {
+            if (AlarmReceiver.taskRingtone!!.isPlaying) {
+                AlarmReceiver.taskRingtone!!.stop()
+                AlarmReceiver.vibrator!!.cancel()
+            }
+        } else if (action == Constants.ACTION_SNOOZE_ALARM) {
+            snoozeAlarm()
+        }
+        return Result.success()
+    }
+
+    @RequiresPermission(Manifest.permission.VIBRATE)
+    private fun snoozeAlarm() {
+        if (AlarmReceiver.taskRingtone!!.isPlaying) {
+            AlarmReceiver.taskRingtone!!.stop()
+            AlarmReceiver.vibrator!!.cancel()
+        }
+
+        val alarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(applicationContext, AlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(applicationContext, notificationId, intent, PendingIntent.FLAG_MUTABLE)
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            Calendar.getInstance().timeInMillis + 5 * 6000,
+            pendingIntent
+        )
+    }
+}
