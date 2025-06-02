@@ -23,6 +23,8 @@ class AlarmsViewModel(
 
     var alarms = mutableStateOf<List<Alarm>>(emptyList())
 
+    val listDays = arrayListOf("SEG", "TER", "QUA", "QUI", "SEX", "SAB", "DOM")
+
     init {
         viewModelScope.launch {
             alarmDao.getAlarms().collect {

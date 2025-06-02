@@ -14,9 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,17 +30,12 @@ import androidx.wear.compose.material3.EdgeButtonSize
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.SwitchButtonDefaults
 import androidx.wear.compose.material3.Text
-import androidx.wear.compose.material3.TimePicker
-import androidx.wear.compose.material3.TimePickerDefaults
-import davi.android.alarmapp.presentation.navigation.DetailsAlarm
-import davi.android.alarmapp.presentation.viewmodel.AddAlarmViewModel
+import davi.android.alarmapp.presentation.navigation.AddAlarm
 import davi.android.alarmapp.presentation.viewmodel.AlarmsViewModel
-import java.time.LocalTime
 
 @Composable
-fun TimerPicker(
+fun Alarms(
     alarmsViewModel: AlarmsViewModel,
-    addAlarmViewModel: AddAlarmViewModel,
     backStack: SnapshotStateList<Any>
 ) {
     val context = LocalContext.current
@@ -51,8 +43,6 @@ fun TimerPicker(
     val horizontalPadding = LocalConfiguration.current.screenWidthDp.dp * 0.052f
     val verticalPadding = LocalConfiguration.current.screenHeightDp.dp * 0.16f
 
-    val showTimePicker = remember { mutableStateOf(false) }
-    var timePickerTime by remember { mutableStateOf(LocalTime.now()) }
     val alarmsScheduled by alarmsViewModel.alarms
 
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -69,72 +59,56 @@ fun TimerPicker(
     }
 
     val customSplitSwitchColors = SwitchButtonDefaults.splitSwitchButtonColors(
-        checkedContainerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+        checkedContainerColor = MaterialTheme.colorScheme.secondary,
         uncheckedContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
         checkedContentColor = Color.White,
         uncheckedContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
         checkedSplitContainerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
         uncheckedSplitContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
         checkedThumbIconColor = Color.White,
-        checkedThumbColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+        checkedThumbColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+        checkedTrackColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        checkedTrackBorderColor = MaterialTheme.colorScheme.onSecondaryContainer,
     )
 
-    if (showTimePicker.value) {
-        TimePicker(
-            onTimePicked = {
-                timePickerTime = it
-                addAlarmViewModel.hour.intValue = it.hour
-                addAlarmViewModel.minute.intValue = it.minute
-                backStack.add(DetailsAlarm)
-            },
-            initialTime = timePickerTime,
-            colors = TimePickerDefaults.timePickerColors(
-                pickerLabelColor = Color.White,
-                unselectedPickerContentColor = MaterialTheme.colorScheme.primaryContainer,
-                confirmButtonContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                confirmButtonContentColor = Color.White
-            )
-        )
-    } else {
-        ScreenScaffold(
-            scrollState = state,
-            contentPadding = PaddingValues(horizontal = horizontalPadding, vertical = verticalPadding),
-            edgeButton = {
-                EdgeButton(
-                    modifier = Modifier.scrollable(
-                        state,
-                        orientation = Orientation.Vertical,
-                        reverseDirection = true,
-                        overscrollEffect = rememberOverscrollEffect()
-                    ),
-                    onClick = {
-                        showTimePicker.value = true
-                    },
-                    buttonSize = EdgeButtonSize.Small,
-                    colors = ButtonDefaults.filledVariantButtonColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer
-                    ),
-                    enabled = true
-                ) {
-                    Text(
-                        "Adicionar",
-                        color = Color.White
-                    )
-                }
-            })
-        { contentPadding ->
-            ScalingLazyColumn(
-                state = state,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .selectableGroup(),
-                autoCentering = null,
-                contentPadding = contentPadding,
-                horizontalAlignment = Alignment.CenterHorizontally
+    ScreenScaffold(
+        scrollState = state,
+        contentPadding = PaddingValues(horizontal = horizontalPadding, vertical = verticalPadding),
+        edgeButton = {
+            EdgeButton(
+                modifier = Modifier.scrollable(
+                    state,
+                    orientation = Orientation.Vertical,
+                    reverseDirection = true,
+                    overscrollEffect = rememberOverscrollEffect()
+                ),
+                onClick = {
+                    backStack.add(AddAlarm)
+                },
+                buttonSize = EdgeButtonSize.Small,
+                colors = ButtonDefaults.filledVariantButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+                ),
+                enabled = true
             ) {
-                itemsIndexed(alarmsScheduled) { index, item ->
-                    AlarmItem(alarmsViewModel, item, showTimePicker, customSplitSwitchColors)
-                }
+                Text(
+                    "Adicionar",
+                    color = Color.White
+                )
+            }
+        })
+    { contentPadding ->
+        ScalingLazyColumn(
+            state = state,
+            modifier = Modifier
+                .fillMaxSize()
+                .selectableGroup(),
+            autoCentering = null,
+            contentPadding = contentPadding,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            itemsIndexed(alarmsScheduled) { index, item ->
+                AlarmItem(alarmsViewModel, backStack, item, customSplitSwitchColors)
             }
         }
     }

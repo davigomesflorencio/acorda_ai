@@ -5,8 +5,11 @@ import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberOverscrollEffect
 import androidx.compose.foundation.selection.selectableGroup
@@ -38,6 +41,7 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.SplitSwitchButton
 import androidx.wear.compose.material3.SwitchButtonDefaults
 import androidx.wear.compose.material3.Text
+import davi.android.alarmapp.presentation.navigation.AlarmDaysWeekScreen
 import davi.android.alarmapp.presentation.viewmodel.AddAlarmViewModel
 import kotlinx.coroutines.launch
 
@@ -53,14 +57,18 @@ fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: Snapshot
     var sonecaActive by remember { mutableStateOf(false) }
 
     val customSplitSwitchColors = SwitchButtonDefaults.splitSwitchButtonColors(
-        checkedContainerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+        checkedContainerColor = MaterialTheme.colorScheme.secondary,
         uncheckedContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.5f),
-        checkedContentColor = Color.White,
+        checkedContentColor = Color.Black,
         uncheckedContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
         checkedSplitContainerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
         uncheckedSplitContainerColor = MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.2f),
         checkedThumbIconColor = Color.White,
-        checkedThumbColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+        checkedThumbColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+        checkedSecondaryContentColor = Color.Black,
+        uncheckedSecondaryContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+        checkedTrackColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        checkedTrackBorderColor = MaterialTheme.colorScheme.onSecondaryContainer,
     )
 
     ScreenScaffold(
@@ -80,6 +88,7 @@ fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: Snapshot
                     scope.launch {
                         addAlarmViewModel.saveAlarm()
                     }
+                    backStack.removeLastOrNull()
                     backStack.removeLastOrNull()
                 },
                 buttonSize = EdgeButtonSize.Small,
@@ -115,12 +124,54 @@ fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: Snapshot
             item {
                 Card(modifier = Modifier.fillMaxSize()) {
                     Chip(
-                        onClick = {},
+                        onClick = {
+                            backStack.add(AlarmDaysWeekScreen)
+                        },
                         label = {
-                            Text("Repetir Semanalmente", fontSize = 14.sp)
+                            Text("Repetir", fontSize = 14.sp, color = Color.Black)
+                        },
+                        secondaryLabel = {
+                            if (addAlarmViewModel.days.isEmpty())
+                                Text(
+                                    "Desligado",
+                                    fontSize = 14.sp, color = Color.Black
+                                )
+                            else {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp)
+                                ) {
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(6.dp), // Space between day icons
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        addAlarmViewModel.listDays.subList(0, 4).forEachIndexed { index, initial ->
+                                            DayOfWeekIcon(
+                                                dayInitial = initial.substring(0, 1),
+                                                isSelected = addAlarmViewModel.days.contains(initial)
+                                            )
+                                        }
+                                    }
+                                    Spacer(Modifier.height(3.dp))
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(6.dp), // Space between day icons
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        addAlarmViewModel.listDays.subList(4, 7).forEachIndexed { index, initial ->
+                                            DayOfWeekIcon(
+                                                dayInitial = initial.substring(0, 1),
+                                                isSelected = addAlarmViewModel.days.contains(initial)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+
                         },
                         colors = ChipDefaults.chipColors(
-                            backgroundColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+                            backgroundColor = MaterialTheme.colorScheme.secondary
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -129,9 +180,7 @@ fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: Snapshot
                     HorizontalDivider()
                     SplitSwitchButton(
                         label = {
-                            Column {
-                                Text("Som", fontSize = 14.sp)
-                            }
+                            Text("Som", fontSize = 14.sp)
                         },
                         checked = soundActive,
                         onCheckedChange = {
@@ -149,9 +198,7 @@ fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: Snapshot
                     HorizontalDivider()
                     SplitSwitchButton(
                         label = {
-                            Column {
-                                Text("Vibração", fontSize = 14.sp)
-                            }
+                            Text("Vibração", fontSize = 14.sp)
                         },
                         checked = alarmVibrate,
                         onCheckedChange = {

@@ -29,6 +29,14 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
 
     val listDays = arrayListOf("SEG", "TER", "QUA", "QUI", "SEX", "SAB", "DOM")
 
+    var dayDomingo = mutableStateOf(false)
+    var daySegunda = mutableStateOf(false)
+    var dayTerca = mutableStateOf(false)
+    var dayQuarta = mutableStateOf(false)
+    var dayQuinta = mutableStateOf(false)
+    var daySexta = mutableStateOf(false)
+    var daySabado = mutableStateOf(false)
+
     init {
         addVibration.value = false
         addSound.value = false

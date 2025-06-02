@@ -11,8 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
-import davi.android.alarmapp.presentation.screens.alarms.TimerPicker
+import davi.android.alarmapp.presentation.screens.addAlarm.AddAlarm
+import davi.android.alarmapp.presentation.screens.alarmDayWeeks.AlarmDaysWeekScreen
+import davi.android.alarmapp.presentation.screens.alarms.Alarms
 import davi.android.alarmapp.presentation.screens.detailsAlarm.DetailsAlarmScreen
+import davi.android.alarmapp.presentation.screens.editAlarm.EditAlarm
+import davi.android.alarmapp.presentation.screens.editDetailsAlarm.EditDetailsAlarm
 import davi.android.alarmapp.presentation.viewmodel.AddAlarmViewModel
 import davi.android.alarmapp.presentation.viewmodel.AlarmsViewModel
 
@@ -33,11 +37,27 @@ fun AlarmAppNavigation(addAlarmViewModel: AddAlarmViewModel, alarmsViewModel: Al
             entryProvider = { key ->
                 when (key) {
                     is Alarms -> NavEntry(key) {
-                        TimerPicker(alarmsViewModel, addAlarmViewModel, backStack)
+                        Alarms(alarmsViewModel, backStack)
+                    }
+
+                    is AddAlarm -> NavEntry(key) {
+                        AddAlarm(addAlarmViewModel, backStack)
                     }
 
                     is DetailsAlarm -> NavEntry(key) {
-                        DetailsAlarmScreen(addAlarmViewModel,backStack)
+                        DetailsAlarmScreen(addAlarmViewModel, backStack)
+                    }
+
+                    is EditAlarm -> NavEntry(key) {
+                        EditAlarm(addAlarmViewModel, backStack, key.alarm)
+                    }
+
+                    is EditDetailsAlarm -> NavEntry(key) {
+                        EditDetailsAlarm(addAlarmViewModel, backStack, key.alarm)
+                    }
+
+                    is AlarmDaysWeekScreen -> NavEntry(key) {
+                        AlarmDaysWeekScreen(addAlarmViewModel, backStack)
                     }
 
                     else -> {

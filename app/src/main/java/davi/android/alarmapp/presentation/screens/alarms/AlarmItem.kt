@@ -1,25 +1,39 @@
 package davi.android.alarmapp.presentation.screens.alarms
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.SplitSwitchButton
 import androidx.wear.compose.material3.SplitSwitchButtonColors
+import androidx.wear.compose.material3.SwipeToReveal
+import androidx.wear.compose.material3.SwipeToRevealDefaults
 import androidx.wear.compose.material3.Text
 import davi.android.alarmapp.domain.model.Alarm
+import davi.android.alarmapp.presentation.navigation.EditAlarm
+import davi.android.alarmapp.presentation.screens.detailsAlarm.DayOfWeekIcon
 import davi.android.alarmapp.presentation.viewmodel.AlarmsViewModel
 
 @Composable
 fun AlarmItem(
     alarmsViewModel: AlarmsViewModel,
+    backStack: MutableList<Any>,
     alarm: Alarm,
-    showTimePicker: MutableState<Boolean>,
     customSplitSwitchColors: SplitSwitchButtonColors
 ) {
     val state = remember { mutableStateOf(false) }
@@ -28,32 +42,75 @@ fun AlarmItem(
         state.value = alarm.disabled
     }
 
-    SplitSwitchButton(
-        label = {
-            Column {
-                Text("Horario do alarme", fontSize = 10.sp)
-                Text(alarm.formattedTime(), fontSize = 10.sp)
-            }
+    SwipeToReveal(
+        primaryAction = {
+            PrimaryActionButton(
+                onClick = { alarmsViewModel.deleteAlarm(alarm) },
+                icon = { Icon(Icons.Outlined.Delete, contentDescription = "Delete") },
+                text = { Text("Excluir") },
+                modifier = Modifier.height(SwipeToRevealDefaults.LargeActionButtonHeight)
+            )
         },
-        checked = state.value,
-        onCheckedChange = {
-            if (it) {
-                alarmsViewModel.activateAlarm(alarm)
-            } else {
-                alarmsViewModel.disable(alarm)
-            }
+        onSwipePrimaryAction = {
+            alarmsViewModel.deleteAlarm(alarm)
         },
-        colors = customSplitSwitchColors,
-        toggleContentDescription = "Split Switch Button Sample",
-        onContainerClick = {
-            if (alarm.disabled) {
-                alarmsViewModel.activateAlarm(alarm)
-            } else {
-                alarmsViewModel.disable(alarm)
-            }
-//            showTimePicker.value = true
+        undoPrimaryAction = {
+            UndoActionButton(
+                onClick = { },
+                text = { Text("Cancelar") },
+            )
         },
-        enabled = true,
-        modifier = Modifier.fillMaxWidth()
-    )
+    ) {
+        SplitSwitchButton(
+            label = {
+                Column {
+                    Text("Horario do alarme", fontSize = 10.sp, color = Color.Black)
+                    Text(alarm.formattedTime(), fontSize = 10.sp, color = Color.Black)
+                }
+            },
+            secondaryLabel = {
+                if (alarm.repeatDays.isNotBlank())
+                    Column(modifier = Modifier.padding(vertical = 5.dp)) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(3.dp), // Space between day icons
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            alarmsViewModel.listDays.subList(0, 4).forEachIndexed { index, initial ->
+                                DayOfWeekIcon(
+                                    dayInitial = initial.substring(0, 1),
+                                    isSelected = alarm.repeatDays.split(",").contains(initial)
+                                )
+                            }
+                        }
+                        Spacer(Modifier.height(3.dp))
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(3.dp), // Space between day icons
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            alarmsViewModel.listDays.subList(4, 7).forEachIndexed { index, initial ->
+                                DayOfWeekIcon(
+                                    dayInitial = initial.substring(0, 1),
+                                    isSelected = alarm.repeatDays.split(",").contains(initial)
+                                )
+                            }
+                        }
+                    }
+            },
+            checked = state.value,
+            onCheckedChange = {
+                if (it) {
+                    alarmsViewModel.activateAlarm(alarm)
+                } else {
+                    alarmsViewModel.disable(alarm)
+                }
+            },
+            colors = customSplitSwitchColors,
+            toggleContentDescription = "Split Switch Button Sample",
+            onContainerClick = {
+                backStack.add(EditAlarm(alarm))
+            },
+            enabled = true,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
