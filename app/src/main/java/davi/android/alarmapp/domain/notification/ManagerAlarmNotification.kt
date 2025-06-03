@@ -13,7 +13,7 @@ import davi.android.alarmapp.R
 import davi.android.alarmapp.core.Constants
 import davi.android.alarmapp.receivers.WorkerTriggerReceiver
 
-class AlarmNotification(base: Context) : ContextWrapper(base) {
+class ManagerAlarmNotification(base: Context) : ContextWrapper(base) {
     private val notificationId = System.currentTimeMillis().toInt()
 
     private var manager: NotificationManager? = null
@@ -50,20 +50,19 @@ class AlarmNotification(base: Context) : ContextWrapper(base) {
 
         return NotificationCompat.Builder(applicationContext, Constants.CHANNEL_ID)
             .setContentText(messageBody)
-            .setSmallIcon(R.drawable.alarm)
-            .setColor(Color.YELLOW)
+            .setSmallIcon(R.drawable.ic_alarm_fill)
+            .setColor(Color.WHITE)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setOngoing(true)
             .addAction(
-                R.drawable.ic_baseline_play_arrow_24,
+                R.drawable.ic_baseline_stop_24,
                 "Parar",
                 stopAlarmTone(this)
             )
             .addAction(R.drawable.ic_baseline_snooze_24, "Soneca", snoozeAlarm(this))
 
     }
-
 
     private fun stopAlarmTone(context: Context): PendingIntent {
         val stopAlarmIntent = Intent(context, WorkerTriggerReceiver::class.java)
