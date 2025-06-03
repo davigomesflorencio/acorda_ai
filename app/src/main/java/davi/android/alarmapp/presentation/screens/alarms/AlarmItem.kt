@@ -52,7 +52,6 @@ fun AlarmItem(
             )
         },
         onSwipePrimaryAction = {
-            alarmsViewModel.deleteAlarm(alarm)
         },
         undoPrimaryAction = {
             UndoActionButton(
@@ -64,8 +63,8 @@ fun AlarmItem(
         SplitSwitchButton(
             label = {
                 Column {
-                    Text("Horario do alarme", fontSize = 10.sp, color = Color.Black)
-                    Text(alarm.formattedTime(), fontSize = 10.sp, color = Color.Black)
+                    Text("Horário do alarme", fontSize = 12.sp, color = Color.Black)
+                    Text(alarm.formattedTime(), fontSize = 16.sp, color = Color.Black)
                 }
             },
             secondaryLabel = {
@@ -112,7 +111,7 @@ fun AlarmItem(
                 backStack.add(EditAlarm(alarm))
             },
             enabled = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp)
         )
     }
 }

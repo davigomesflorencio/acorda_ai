@@ -62,10 +62,8 @@ fun Alarms(
 
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    // State to track permission status
     var hasPermission by remember { mutableStateOf(alarmManager.canScheduleExactAlarms()) }
 
-    // Listen for permission changes
     val permissionListener = remember {
         object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
