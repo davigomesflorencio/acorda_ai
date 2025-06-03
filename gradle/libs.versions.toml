@@ -1,6 +1,8 @@
 [versions]
 agp = "8.12.0-alpha01"
 kotlin = "2.0.21"
+material3Android = "1.4.0-alpha14"
+materialIconsExtended = "1.7.8"
 playServicesWearable = "19.0.0"
 composeBom = "2024.09.00"
 composeMaterial = "1.2.1"
@@ -19,6 +21,8 @@ junit = "4.13.2"
 work = "2.8.0"
 
 [libraries]
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+androidx-material3-android = { module = "androidx.compose.material3:material3-android", version.ref = "material3Android" }
 play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "playServicesWearable" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 ui = { group = "androidx.compose.ui", name = "ui" }
