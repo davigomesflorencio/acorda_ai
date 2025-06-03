@@ -11,7 +11,6 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
@@ -34,7 +33,6 @@ fun AlarmDaysWeekScreen(
     addAlarmViewModel: AddAlarmViewModel,
     backStack: SnapshotStateList<Any>
 ) {
-    val scope = rememberCoroutineScope()
     val state = rememberScalingLazyListState()
     val horizontalPadding = LocalConfiguration.current.screenWidthDp.dp * 0.052f
     val verticalPadding = LocalConfiguration.current.screenHeightDp.dp * 0.16f
