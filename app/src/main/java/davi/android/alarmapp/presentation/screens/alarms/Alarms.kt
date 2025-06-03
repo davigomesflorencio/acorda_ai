@@ -72,7 +72,6 @@ fun Alarms(
         }
     }
 
-    // Register receiver
     DisposableEffect(Unit) {
         context.registerReceiver(
             permissionListener,

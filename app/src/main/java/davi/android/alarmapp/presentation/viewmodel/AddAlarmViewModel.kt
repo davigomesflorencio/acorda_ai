@@ -25,8 +25,8 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
     var hour = mutableIntStateOf(0)
 
     var addVibration = MutableLiveData<Boolean>()
-    var addSound = mutableStateOf<Boolean>(false)
-    var addSnooze = mutableStateOf<Boolean>(false)
+    var addSound = mutableStateOf(false)
+    var addSnooze = mutableStateOf(false)
     private var vibrator: Vibrator
 
     val listDays = arrayListOf("SEG", "TER", "QUA", "QUI", "SEX", "SAB", "DOM")
@@ -48,8 +48,7 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
         hour.intValue = calendar.get(Calendar.MINUTE)
 
         val vibratorManager = application.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as? VibratorManager
-        vibrator = vibratorManager?.defaultVibrator ?: (application.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator)
-
+        vibrator = vibratorManager?.defaultVibrator!!
     }
 
     fun addToSelectedDays(day: String) {
