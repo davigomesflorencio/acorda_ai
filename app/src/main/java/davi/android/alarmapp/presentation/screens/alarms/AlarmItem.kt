@@ -38,7 +38,7 @@ fun AlarmItem(
 ) {
     val state = remember { mutableStateOf(false) }
 
-    LaunchedEffect(alarm) {
+    LaunchedEffect(alarm.disabled) {
         state.value = alarm.disabled
     }
 
@@ -72,25 +72,27 @@ fun AlarmItem(
                 if (alarm.repeatDays.isNotBlank())
                     Column(modifier = Modifier.padding(vertical = 5.dp)) {
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(3.dp), // Space between day icons
+                            horizontalArrangement = Arrangement.Center, // Space between day icons
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             alarmsViewModel.listDays.subList(0, 4).forEachIndexed { index, initial ->
                                 DayOfWeekIcon(
                                     dayInitial = initial.substring(0, 1),
-                                    isSelected = alarm.repeatDays.split(",").contains(initial)
+                                    isSelected = alarm.repeatDays.split(",").contains(initial),
+                                    modifier = Modifier.padding(horizontal = 1.2.dp)
                                 )
                             }
                         }
                         Spacer(Modifier.height(3.dp))
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(3.dp), // Space between day icons
+                            horizontalArrangement = Arrangement.Center, // Space between day icons
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             alarmsViewModel.listDays.subList(4, 7).forEachIndexed { index, initial ->
                                 DayOfWeekIcon(
                                     dayInitial = initial.substring(0, 1),
-                                    isSelected = alarm.repeatDays.split(",").contains(initial)
+                                    isSelected = alarm.repeatDays.split(",").contains(initial),
+                                    modifier = Modifier.padding(horizontal = 1.2.dp)
                                 )
                             }
                         }

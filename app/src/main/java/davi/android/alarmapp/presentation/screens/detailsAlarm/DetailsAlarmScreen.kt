@@ -54,7 +54,7 @@ fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: Snapshot
 
     var soundActive by remember { mutableStateOf(false) }
     var alarmVibrate by remember { mutableStateOf(false) }
-    var sonecaActive by remember { mutableStateOf(false) }
+    var snoozeActive by remember { mutableStateOf(false) }
 
     val customSplitSwitchColors = SwitchButtonDefaults.splitSwitchButtonColors(
         checkedContainerColor = MaterialTheme.colorScheme.secondary,
@@ -85,6 +85,7 @@ fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: Snapshot
                 onClick = {
                     addAlarmViewModel.addVibration.value = alarmVibrate
                     addAlarmViewModel.addSound.value = soundActive
+                    addAlarmViewModel.addSnooze.value = snoozeActive
                     scope.launch {
                         addAlarmViewModel.saveAlarm()
                     }
@@ -139,7 +140,9 @@ fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: Snapshot
                             else {
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
-                                    modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp)
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 5.dp)
                                 ) {
                                     Row(
                                         horizontalArrangement = Arrangement.spacedBy(6.dp), // Space between day icons
@@ -221,9 +224,9 @@ fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: Snapshot
                         secondaryLabel = {
                             Text("5 minutos, 3 vezes", fontSize = 12.sp)
                         },
-                        checked = sonecaActive,
+                        checked = snoozeActive,
                         onCheckedChange = {
-                            sonecaActive = it
+                            snoozeActive = it
                         },
                         toggleContentDescription = "Split Switch Button Sample",
                         onContainerClick = {

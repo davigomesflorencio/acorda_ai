@@ -1,10 +1,23 @@
 package davi.android.alarmapp.presentation.navigation
 
+import androidx.navigation3.runtime.NavKey
 import davi.android.alarmapp.domain.model.Alarm
+import kotlinx.serialization.Serializable
 
-data object Alarms
-data object AddAlarm
-data object DetailsAlarm
-data object AlarmDaysWeekScreen
-data class EditAlarm(val alarm: Alarm)
-data class EditDetailsAlarm(val alarm: Alarm)
+@Serializable
+data object Alarms : NavKey
+
+@Serializable
+data object AddAlarm : NavKey
+
+@Serializable
+data object DetailsAlarm : NavKey
+
+@Serializable
+data object AlarmDaysWeekScreen : NavKey
+
+@Serializable
+data class EditAlarm(val alarm: Alarm) : NavKey
+
+@Serializable
+data class EditDetailsAlarm(val alarm: Alarm) : NavKey

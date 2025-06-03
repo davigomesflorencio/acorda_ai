@@ -17,6 +17,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,7 +57,7 @@ fun EditDetailsAlarm(addAlarmViewModel: AddAlarmViewModel, backStack: SnapshotSt
 
     var soundActive by remember { mutableStateOf(alarm.soundActive) }
     var alarmVibrate by remember { mutableStateOf(alarm.vibration) }
-    var sonecaActive by remember { mutableStateOf(false) }
+    var snoozeActive by remember { mutableStateOf(alarm.snoozeActive) }
 
     val customSplitSwitchColors = SwitchButtonDefaults.splitSwitchButtonColors(
         checkedContainerColor = MaterialTheme.colorScheme.secondary,
@@ -73,6 +74,17 @@ fun EditDetailsAlarm(addAlarmViewModel: AddAlarmViewModel, backStack: SnapshotSt
         checkedTrackBorderColor = MaterialTheme.colorScheme.onSecondaryContainer,
     )
 
+    LaunchedEffect(Unit) {
+        val listDays = alarm.repeatDays.split(",")
+        addAlarmViewModel.dayDomingo.value = listDays.contains("DOM")
+        addAlarmViewModel.daySegunda.value = listDays.contains("SEG")
+        addAlarmViewModel.dayTerca.value = listDays.contains("TER")
+        addAlarmViewModel.dayQuarta.value = listDays.contains("QUA")
+        addAlarmViewModel.dayQuinta.value = listDays.contains("QUI")
+        addAlarmViewModel.daySexta.value = listDays.contains("SEX")
+        addAlarmViewModel.daySabado.value = listDays.contains("SAB")
+    }
+
     ScreenScaffold(
         scrollState = state,
         contentPadding = PaddingValues(horizontal = horizontalPadding, vertical = verticalPadding),
@@ -87,10 +99,13 @@ fun EditDetailsAlarm(addAlarmViewModel: AddAlarmViewModel, backStack: SnapshotSt
                 onClick = {
                     addAlarmViewModel.addVibration.value = alarmVibrate
                     addAlarmViewModel.addSound.value = soundActive
+                    addAlarmViewModel.addSnooze.value = snoozeActive
                     scope.launch {
-                        addAlarmViewModel.saveAlarm()
+                        addAlarmViewModel.updateAlarm(alarm)
                     }
-                    backStack.removeLastOrNull()
+                    backStack.remove(
+                        davi.android.alarmapp.presentation.navigation.EditDetailsAlarm(alarm)
+                    )
                     backStack.removeLastOrNull()
                 },
                 buttonSize = EdgeButtonSize.Small,
@@ -123,6 +138,14 @@ fun EditDetailsAlarm(addAlarmViewModel: AddAlarmViewModel, backStack: SnapshotSt
                     fontWeight = FontWeight.Bold
                 )
             }
+
+            item {
+                Text(
+                    "${addAlarmViewModel.hour.intValue.toString().padStart(2, '0')}:${addAlarmViewModel.minute.intValue.toString().padStart(2, '0')}",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
             item {
                 Card(modifier = Modifier.fillMaxSize()) {
                     Chip(
@@ -146,27 +169,29 @@ fun EditDetailsAlarm(addAlarmViewModel: AddAlarmViewModel, backStack: SnapshotSt
                                         .padding(vertical = 5.dp)
                                 ) {
                                     Row(
-                                        horizontalArrangement = Arrangement.spacedBy(6.dp), // Space between day icons
+                                        horizontalArrangement = Arrangement.Center, // Space between day icons
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier = Modifier.fillMaxWidth()
                                     ) {
                                         addAlarmViewModel.listDays.subList(0, 4).forEachIndexed { index, initial ->
                                             DayOfWeekIcon(
                                                 dayInitial = initial.substring(0, 1),
-                                                isSelected = addAlarmViewModel.days.contains(initial)
+                                                isSelected = addAlarmViewModel.days.contains(initial),
+                                                modifier = Modifier.padding(horizontal = 6.dp)
                                             )
                                         }
                                     }
                                     Spacer(Modifier.height(3.dp))
                                     Row(
-                                        horizontalArrangement = Arrangement.spacedBy(6.dp), // Space between day icons
+                                        horizontalArrangement = Arrangement.Center, // Space between day icons
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier = Modifier.fillMaxWidth()
                                     ) {
                                         addAlarmViewModel.listDays.subList(4, 7).forEachIndexed { index, initial ->
                                             DayOfWeekIcon(
                                                 dayInitial = initial.substring(0, 1),
-                                                isSelected = addAlarmViewModel.days.contains(initial)
+                                                isSelected = addAlarmViewModel.days.contains(initial),
+                                                modifier = Modifier.padding(horizontal = 6.dp)
                                             )
                                         }
                                     }
@@ -225,9 +250,9 @@ fun EditDetailsAlarm(addAlarmViewModel: AddAlarmViewModel, backStack: SnapshotSt
                         secondaryLabel = {
                             Text("5 minutos, 3 vezes", fontSize = 12.sp)
                         },
-                        checked = sonecaActive,
+                        checked = snoozeActive,
                         onCheckedChange = {
-                            sonecaActive = it
+                            snoozeActive = it
                         },
                         toggleContentDescription = "Split Switch Button Sample",
                         onContainerClick = {

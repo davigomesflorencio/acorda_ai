@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.util.Log
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
@@ -25,6 +26,7 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
 
     var addVibration = MutableLiveData<Boolean>()
     var addSound = mutableStateOf<Boolean>(false)
+    var addSnooze = mutableStateOf<Boolean>(false)
     private var vibrator: Vibrator
 
     val listDays = arrayListOf("SEG", "TER", "QUA", "QUI", "SEX", "SAB", "DOM")
@@ -61,25 +63,44 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
         days.remove(day)
     }
 
+    suspend fun updateAlarm(alarm: Alarm): Boolean {
+        try {
+            alarm.vibration = addVibration.value!!
+            alarm.repeatDays = days.joinToString(separator = ",") { it }
+            alarm.min = minute.intValue
+            alarm.hour = hour.intValue
+            alarm.disabled = true
+            alarm.soundActive = addSound.value
+            alarm.snoozeActive = addSnooze.value
+
+            val alarmIdFromDb = alarm.dbId
+            alarmDao.update(alarm)
+            scheduleAlarmInManager(alarm, alarmIdFromDb.toInt())
+            Log.d("AlarmUpdateDebug", "Alarm update successful (or at least the call completed).")
+            return true
+        } catch (e: Exception) {
+            Log.e("AlarmUpdateDebug", "Error updating alarm in DAO", e)
+            return false
+        }
+    }
+
     suspend fun saveAlarm(): Boolean {
         try {
             val alarm = Alarm(
-                dbId = 0, // Room will generate this
+                dbId = 0,
                 vibration = addVibration.value!!,
                 repeatDays = days.joinToString(separator = ",") { it },
                 min = minute.intValue,
                 hour = hour.intValue,
                 disabled = true,
-                soundActive = addSound.value
+                soundActive = addSound.value,
+                snoozeActive = addSnooze.value
             )
-            // The ID returned by insert is the auto-generated dbId
             val alarmIdFromDb = alarmDao.insert(alarm)
-            val alarmToSchedule = alarm.copy(dbId = alarmIdFromDb) // Use the actual ID for scheduling
-
+            val alarmToSchedule = alarm.copy(dbId = alarmIdFromDb)
             scheduleAlarmInManager(alarmToSchedule, alarmIdFromDb.toInt())
             return true
         } catch (_: Exception) {
-            // Log error e.printStackTrace() or use a logging library
             return false
         }
     }
