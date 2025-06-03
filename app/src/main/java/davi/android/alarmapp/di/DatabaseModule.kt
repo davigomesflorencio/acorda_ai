@@ -15,9 +15,7 @@ val databaseModule = module {
             AlarmDatabase::class.java,
             DatabaseConstants.ALARM_DATABASE
         )
-            .fallbackToDestructiveMigrationFrom()
-            .addMigrations(MigrationAlarmDb.MIGRATION_5_6)
-            .addMigrations(MigrationAlarmDb.MIGRATION_6_7)
+            .addMigrations(MigrationAlarmDb.MIGRATION_7_8)
             .build()
     }
     single {

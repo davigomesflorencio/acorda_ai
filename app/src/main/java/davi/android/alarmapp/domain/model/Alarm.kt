@@ -4,7 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import davi.android.alarmapp.core.DatabaseConstants
+import kotlinx.serialization.Serializable
 
+@Serializable
 @Entity(tableName = DatabaseConstants.TABLE_ALARM)
 data class Alarm(
     @PrimaryKey(autoGenerate = true)
@@ -20,9 +22,15 @@ data class Alarm(
     @ColumnInfo(name = "disabled")
     var disabled: Boolean,
     @ColumnInfo(name = "soundActive")
-    var soundActive: Boolean
+    var soundActive: Boolean,
+    @ColumnInfo(name = "snoozeActive")
+    var snoozeActive: Boolean
 ) {
     fun formattedTime(): String {
         return hour.toString().padStart(2, '0') + ":" + min.toString().padStart(2, '0')
+    }
+
+    override fun hashCode(): Int {
+        return dbId.toInt()
     }
 }

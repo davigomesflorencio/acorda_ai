@@ -7,7 +7,7 @@ import davi.android.alarmapp.domain.model.Alarm
 
 @Database(
     entities = [Alarm::class],
-    version = 7,
+    version = 8,
     exportSchema = true
 )
 abstract class AlarmDatabase : RoomDatabase() {
