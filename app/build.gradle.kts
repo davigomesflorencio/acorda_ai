@@ -1,3 +1,19 @@
+import java.io.FileInputStream
+import java.util.Properties
+
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
+fun hasSigningVars(): Boolean {
+    return providers.environmentVariable("SIGNING_KEY_ALIAS").orNull != null
+            && providers.environmentVariable("SIGNING_KEY_PASSWORD").orNull != null
+            && providers.environmentVariable("SIGNING_STORE_FILE").orNull != null
+            && providers.environmentVariable("SIGNING_STORE_PASSWORD").orNull != null
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -19,25 +35,51 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments.put("room.schemaLocation","$projectDir/schemas")
+                arguments.put("room.schemaLocation", "$projectDir/schemas")
+            }
+        }
+    }
+
+    signingConfigs {
+        if (keystorePropertiesFile.exists()) {
+            register("release") {
+                keyAlias = keystoreProperties["keyAlias"] as String
+                keyPassword = keystoreProperties["keyPassword"] as String
+                storeFile = keystoreProperties["storeFile"]?.let { file(it) }
+                storePassword = keystoreProperties["storePassword"] as String
             }
         }
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+        }
+        getByName("release") {
+            isMinifyEnabled = true
+            isShrinkResources = true
+        }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            if (keystorePropertiesFile.exists() || hasSigningVars()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
     useLibrary("wear-sdk")
+
     buildFeatures {
         compose = true
     }
