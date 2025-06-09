@@ -1,4 +1,4 @@
-# Alarm Wear App
+# Acordaí - Alarme para Smartwatches com o Wear Os
 
 ## Novidades
 
