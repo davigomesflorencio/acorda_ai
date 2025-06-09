@@ -22,9 +22,7 @@ import davi.android.alarmapp.presentation.viewmodel.AlarmsViewModel
 
 @Composable
 fun AlarmAppNavigation(addAlarmViewModel: AddAlarmViewModel, alarmsViewModel: AlarmsViewModel) {
-
-    val backStack = remember { mutableStateListOf<Any>(Alarms) }
-
+    val backStack = remember { mutableStateListOf<Any>(RouteAlarms) }
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -36,23 +34,23 @@ fun AlarmAppNavigation(addAlarmViewModel: AddAlarmViewModel, alarmsViewModel: Al
             onBack = { backStack.removeLastOrNull() },
             entryProvider = { key ->
                 when (key) {
-                    is Alarms -> NavEntry(key) {
+                    is RouteAlarms -> NavEntry(key) {
                         Alarms(alarmsViewModel, backStack)
                     }
 
-                    is AddAlarm -> NavEntry(key) {
+                    is RouteAddAlarm -> NavEntry(key) {
                         AddAlarm(addAlarmViewModel, backStack)
                     }
 
-                    is DetailsAlarm -> NavEntry(key) {
+                    is RouteDetailsAlarm -> NavEntry(key) {
                         DetailsAlarmScreen(addAlarmViewModel, backStack)
                     }
 
-                    is EditAlarm -> NavEntry(key) {
+                    is RouteEditAlarm -> NavEntry(key) {
                         EditAlarm(addAlarmViewModel, backStack, key.alarm)
                     }
 
-                    is EditDetailsAlarm -> NavEntry(key) {
+                    is RouteEditDetailsAlarm -> NavEntry(key) {
                         EditDetailsAlarm(addAlarmViewModel, backStack, key.alarm)
                     }
 

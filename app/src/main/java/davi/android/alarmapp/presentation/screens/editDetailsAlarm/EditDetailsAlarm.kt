@@ -104,7 +104,7 @@ fun EditDetailsAlarm(addAlarmViewModel: AddAlarmViewModel, backStack: SnapshotSt
                         addAlarmViewModel.updateAlarm(alarm)
                     }
                     backStack.remove(
-                        davi.android.alarmapp.presentation.navigation.EditDetailsAlarm(alarm)
+                        davi.android.alarmapp.presentation.navigation.RouteEditDetailsAlarm(alarm)
                     )
                     backStack.removeLastOrNull()
                 },

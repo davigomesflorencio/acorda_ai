@@ -10,7 +10,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.Color
 import androidx.wear.compose.material3.TimePicker
 import androidx.wear.compose.material3.TimePickerDefaults
-import davi.android.alarmapp.presentation.navigation.DetailsAlarm
+import davi.android.alarmapp.presentation.navigation.RouteDetailsAlarm
 import davi.android.alarmapp.presentation.viewmodel.AddAlarmViewModel
 import java.time.LocalTime
 
@@ -24,7 +24,7 @@ fun AddAlarm(addAlarmViewModel: AddAlarmViewModel, backStack: SnapshotStateList<
             timePickerTime = it
             addAlarmViewModel.hour.intValue = it.hour
             addAlarmViewModel.minute.intValue = it.minute
-            backStack.add(DetailsAlarm)
+            backStack.add(RouteDetailsAlarm)
         },
         initialTime = timePickerTime,
         colors = TimePickerDefaults.timePickerColors(

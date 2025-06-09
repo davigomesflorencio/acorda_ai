@@ -3,6 +3,12 @@ package davi.android.alarmapp
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
 import davi.android.alarmapp.domain.vibration.ManagerVibrationAndSound
 import davi.android.alarmapp.presentation.navigation.AlarmAppNavigation
@@ -19,11 +25,18 @@ class MainActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
+        installSplashScreen()
         super.onCreate(savedInstanceState)
 
         setContent {
             AlarmAppTheme {
-                AlarmAppNavigation(addAlarmViewModel, alarmsViewModel)
+                Surface(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Green),
+                ) {
+                    AlarmAppNavigation(addAlarmViewModel, alarmsViewModel)
+                }
             }
         }
     }

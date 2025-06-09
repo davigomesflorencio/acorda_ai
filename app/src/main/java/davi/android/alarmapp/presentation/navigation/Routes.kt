@@ -5,19 +5,19 @@ import davi.android.alarmapp.domain.model.Alarm
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object Alarms : NavKey
+data object RouteAlarms : NavKey
 
 @Serializable
-data object AddAlarm : NavKey
+data object RouteAddAlarm : NavKey
 
 @Serializable
-data object DetailsAlarm : NavKey
+data object RouteDetailsAlarm : NavKey
 
 @Serializable
 data object AlarmDaysWeekScreen : NavKey
 
 @Serializable
-data class EditAlarm(val alarm: Alarm) : NavKey
+data class RouteEditAlarm(val alarm: Alarm) : NavKey
 
 @Serializable
-data class EditDetailsAlarm(val alarm: Alarm) : NavKey
+data class RouteEditDetailsAlarm(val alarm: Alarm) : NavKey

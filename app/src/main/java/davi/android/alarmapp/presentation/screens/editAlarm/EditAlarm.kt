@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.wear.compose.material3.TimePicker
 import androidx.wear.compose.material3.TimePickerDefaults
 import davi.android.alarmapp.domain.model.Alarm
-import davi.android.alarmapp.presentation.navigation.EditDetailsAlarm
+import davi.android.alarmapp.presentation.navigation.RouteEditDetailsAlarm
 import davi.android.alarmapp.presentation.viewmodel.AddAlarmViewModel
 import java.time.LocalTime
 
@@ -32,7 +32,7 @@ fun EditAlarm(addAlarmViewModel: AddAlarmViewModel, backStack: SnapshotStateList
             alarm.repeatDays.split(",").forEach { day ->
                 addAlarmViewModel.addToSelectedDays(day)
             }
-            backStack.add(EditDetailsAlarm(alarm))
+            backStack.add(RouteEditDetailsAlarm(alarm))
         },
         initialTime = timePickerTime,
         colors = TimePickerDefaults.timePickerColors(
