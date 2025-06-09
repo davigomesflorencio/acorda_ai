@@ -25,7 +25,7 @@ import androidx.wear.compose.material3.SwipeToReveal
 import androidx.wear.compose.material3.SwipeToRevealDefaults
 import androidx.wear.compose.material3.Text
 import davi.android.alarmapp.domain.model.Alarm
-import davi.android.alarmapp.presentation.navigation.EditAlarm
+import davi.android.alarmapp.presentation.navigation.RouteEditAlarm
 import davi.android.alarmapp.presentation.screens.detailsAlarm.DayOfWeekIcon
 import davi.android.alarmapp.presentation.viewmodel.AlarmsViewModel
 
@@ -108,7 +108,7 @@ fun AlarmItem(
             colors = customSplitSwitchColors,
             toggleContentDescription = "Split Switch Button Sample",
             onContainerClick = {
-                backStack.add(EditAlarm(alarm))
+                backStack.add(RouteEditAlarm(alarm))
             },
             enabled = true,
             modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp)
