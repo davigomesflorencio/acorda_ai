@@ -2,16 +2,9 @@ import java.io.FileInputStream
 import java.util.Properties
 
 val keystoreProperties = Properties()
-val keystorePropertiesFile = rootProject.file("key.properties")
+val keystorePropertiesFile = rootProject.file("app/key.properties")
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
-}
-
-fun hasSigningVars(): Boolean {
-    return providers.environmentVariable("SIGNING_KEY_ALIAS").orNull != null
-            && providers.environmentVariable("SIGNING_KEY_PASSWORD").orNull != null
-            && providers.environmentVariable("SIGNING_STORE_FILE").orNull != null
-            && providers.environmentVariable("SIGNING_STORE_PASSWORD").orNull != null
 }
 
 plugins {
@@ -48,38 +41,37 @@ android {
                 storeFile = keystoreProperties["storeFile"]?.let { file(it) }
                 storePassword = keystoreProperties["storePassword"] as String
             }
+        } else {
+            logger.warn("Warning Signing: No signing config found. Build will be unsigned.")
         }
     }
 
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
-        }
-        getByName("release") {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            if (keystorePropertiesFile.exists() || hasSigningVars()) {
+            if (keystorePropertiesFile.exists()) {
                 signingConfig = signingConfigs.getByName("release")
+            } else {
+                logger.warn("Warning Release: No signing config found. Build will be unsigned.")
             }
         }
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-
     kotlinOptions {
         jvmTarget = "11"
     }
-
     useLibrary("wear-sdk")
-
     buildFeatures {
         compose = true
     }
@@ -119,6 +111,7 @@ dependencies {
     implementation(libs.core.splashscreen)
     implementation(libs.compose.material3)
     androidTestImplementation(platform(libs.compose.bom))
+
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
