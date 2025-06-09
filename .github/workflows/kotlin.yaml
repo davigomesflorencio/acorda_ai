@@ -45,6 +45,6 @@ jobs:
           name: Release v${{ env.RELEASE_VERSION }}
           body: "APK release for version ${{ env.RELEASE_VERSION }}"
           files: |
-            app/build/outputs/apk/release/app-release.apk
+            app/build/outputs/apk/**/*.apk
           draft: false
           prerelease: false
