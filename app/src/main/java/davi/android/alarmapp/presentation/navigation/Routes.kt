@@ -5,6 +5,9 @@ import davi.android.alarmapp.domain.model.Alarm
 import kotlinx.serialization.Serializable
 
 @Serializable
+data object RouteSplash : NavKey
+
+@Serializable
 data object RouteAlarms : NavKey
 
 @Serializable
