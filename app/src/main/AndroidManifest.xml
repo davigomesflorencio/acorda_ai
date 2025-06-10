@@ -12,7 +12,7 @@
 
     <application
         android:name=".AlarmApp"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_foreground"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/MainActivityTheme.Starting">
