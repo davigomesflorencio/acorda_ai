@@ -13,8 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.Scaffold
+import androidx.wear.tooling.preview.devices.WearDevices.SMALL_ROUND
 import davi.android.alarmapp.R
 import davi.android.alarmapp.presentation.navigation.RouteAlarms
 import kotlinx.coroutines.delay
@@ -43,4 +45,10 @@ fun SplashScreen(backStack: SnapshotStateList<Any>) {
             )
         }
     }
+}
+
+@Preview(device = SMALL_ROUND)
+@Composable
+fun preview(){
+    SplashScreen(backStack = SnapshotStateList())
 }
