@@ -23,8 +23,8 @@ android {
         applicationId = "davi.android.alarmapp"
         minSdk = 33
         targetSdk = 36
-        versionCode = 7
-        versionName = "1.4.2"
+        versionCode = 9
+        versionName = "1.4.4"
 
         javaCompileOptions {
             annotationProcessorOptions {
