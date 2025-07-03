@@ -16,6 +16,8 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
@@ -26,6 +28,7 @@ import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.EdgeButtonSize
 import androidx.wear.compose.material3.ScreenScaffold
+import davi.android.alarmapp.R
 import davi.android.alarmapp.presentation.viewmodel.AddAlarmViewModel
 
 @Composable
@@ -33,6 +36,7 @@ fun AlarmDaysWeekScreen(
     addAlarmViewModel: AddAlarmViewModel,
     backStack: SnapshotStateList<Any>
 ) {
+    val context = LocalContext.current
     val state = rememberScalingLazyListState()
     val horizontalPadding = LocalConfiguration.current.screenWidthDp.dp * 0.052f
     val verticalPadding = LocalConfiguration.current.screenHeightDp.dp * 0.16f
@@ -67,9 +71,8 @@ fun AlarmDaysWeekScreen(
                 colors = ButtonDefaults.filledVariantButtonColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer
                 ),
-
-                ) {
-                Text("Salvar")
+            ) {
+                Text(stringResource(R.string.save))
             }
         })
     { contentPadding ->
@@ -90,28 +93,34 @@ fun AlarmDaysWeekScreen(
                         onCheckedChange = {
                             dayDomingo = !dayDomingo
                             if (dayDomingo) {
-                                addAlarmViewModel.addToSelectedDays("DOM")
+                                addAlarmViewModel.addToSelectedDays(context.getString(R.string.sun))
                             } else {
-                                addAlarmViewModel.removeFromSelectedDays("DOM")
+                                addAlarmViewModel.removeFromSelectedDays(context.getString(R.string.sun))
                             }
                         },
                         colors = toggleBtColor
                     ) {
-                        Text("DOM")
+                        Text(
+                            context.getString(R.string.sun),
+                            style = MaterialTheme.typography.labelSmall
+                        )
                     }
                     ToggleButton(
                         checked = daySegunda,
                         onCheckedChange = {
                             daySegunda = !daySegunda
                             if (daySegunda) {
-                                addAlarmViewModel.addToSelectedDays("SEG")
+                                addAlarmViewModel.addToSelectedDays(context.getString(R.string.mon))
                             } else {
-                                addAlarmViewModel.removeFromSelectedDays("SEG")
+                                addAlarmViewModel.removeFromSelectedDays(context.getString(R.string.mon))
                             }
                         },
                         colors = toggleBtColor
                     ) {
-                        Text("SEG")
+                        Text(
+                            context.getString(R.string.mon),
+                            style = MaterialTheme.typography.labelSmall
+                        )
                     }
                 }
             }
@@ -122,42 +131,51 @@ fun AlarmDaysWeekScreen(
                         onCheckedChange = {
                             dayTerca = !dayTerca
                             if (dayTerca) {
-                                addAlarmViewModel.addToSelectedDays("TER")
+                                addAlarmViewModel.addToSelectedDays(context.getString(R.string.tue))
                             } else {
-                                addAlarmViewModel.removeFromSelectedDays("TER")
+                                addAlarmViewModel.removeFromSelectedDays(context.getString(R.string.tue))
                             }
                         },
                         colors = toggleBtColor
                     ) {
-                        Text("TER")
+                        Text(
+                            context.getString(R.string.tue),
+                            style = MaterialTheme.typography.labelSmall
+                        )
                     }
                     ToggleButton(
                         checked = dayQuarta,
                         onCheckedChange = {
                             dayQuarta = !dayQuarta
                             if (dayQuarta) {
-                                addAlarmViewModel.addToSelectedDays("QUA")
+                                addAlarmViewModel.addToSelectedDays(context.getString(R.string.wed))
                             } else {
-                                addAlarmViewModel.removeFromSelectedDays("QUA")
+                                addAlarmViewModel.removeFromSelectedDays(context.getString(R.string.wed))
                             }
                         },
                         colors = toggleBtColor
                     ) {
-                        Text("QUA")
+                        Text(
+                            context.getString(R.string.wed),
+                            style = MaterialTheme.typography.labelSmall
+                        )
                     }
                     ToggleButton(
                         checked = dayQuinta,
                         onCheckedChange = {
                             dayQuinta = !dayQuinta
                             if (dayQuinta) {
-                                addAlarmViewModel.addToSelectedDays("QUI")
+                                addAlarmViewModel.addToSelectedDays(context.getString(R.string.thu))
                             } else {
-                                addAlarmViewModel.removeFromSelectedDays("QUI")
+                                addAlarmViewModel.removeFromSelectedDays(context.getString(R.string.thu))
                             }
                         },
                         colors = toggleBtColor
                     ) {
-                        Text("QUI")
+                        Text(
+                            context.getString(R.string.thu),
+                            style = MaterialTheme.typography.labelSmall
+                        )
                     }
                 }
             }
@@ -168,28 +186,34 @@ fun AlarmDaysWeekScreen(
                         onCheckedChange = {
                             daySexta = !daySexta
                             if (daySexta) {
-                                addAlarmViewModel.addToSelectedDays("SEX")
+                                addAlarmViewModel.addToSelectedDays(context.getString(R.string.fri))
                             } else {
-                                addAlarmViewModel.removeFromSelectedDays("SEX")
+                                addAlarmViewModel.removeFromSelectedDays(context.getString(R.string.fri))
                             }
                         },
                         colors = toggleBtColor
                     ) {
-                        Text("SEX")
+                        Text(
+                            context.getString(R.string.fri),
+                            style = MaterialTheme.typography.labelSmall
+                        )
                     }
                     ToggleButton(
                         checked = daySabado,
                         onCheckedChange = {
                             daySabado = !daySabado
                             if (daySabado) {
-                                addAlarmViewModel.addToSelectedDays("SAB")
+                                addAlarmViewModel.addToSelectedDays(context.getString(R.string.sat))
                             } else {
-                                addAlarmViewModel.removeFromSelectedDays("SAB")
+                                addAlarmViewModel.removeFromSelectedDays(context.getString(R.string.sat))
                             }
                         },
                         colors = toggleBtColor
                     ) {
-                        Text("SAB")
+                        Text(
+                            context.getString(R.string.sat),
+                            style = MaterialTheme.typography.labelSmall
+                        )
                     }
                 }
             }

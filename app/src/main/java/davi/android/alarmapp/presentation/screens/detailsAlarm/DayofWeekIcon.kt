@@ -35,7 +35,8 @@ fun DayOfWeekIcon(
             color = contentColor,
             fontSize = 8.sp, // Adjusted for smaller circle
             fontWeight = FontWeight.Bold, // Make it pop a bit
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.labelSmall
         )
     }
 }

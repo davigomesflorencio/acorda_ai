@@ -17,6 +17,7 @@ import davi.android.alarmapp.presentation.screens.alarms.Alarms
 import davi.android.alarmapp.presentation.screens.detailsAlarm.DetailsAlarmScreen
 import davi.android.alarmapp.presentation.screens.editAlarm.EditAlarm
 import davi.android.alarmapp.presentation.screens.editDetailsAlarm.EditDetailsAlarm
+import davi.android.alarmapp.presentation.screens.ringtone.RingtoneSettingsScreen
 import davi.android.alarmapp.presentation.screens.splash.SplashScreen
 import davi.android.alarmapp.presentation.viewmodel.AddAlarmViewModel
 import davi.android.alarmapp.presentation.viewmodel.AlarmsViewModel
@@ -61,6 +62,10 @@ fun AlarmAppNavigation(addAlarmViewModel: AddAlarmViewModel, alarmsViewModel: Al
 
                     is AlarmDaysWeekScreen -> NavEntry(key) {
                         AlarmDaysWeekScreen(addAlarmViewModel, backStack)
+                    }
+
+                    is RouteRingtone -> NavEntry(key) {
+                        RingtoneSettingsScreen(addAlarmViewModel, backStack)
                     }
 
                     else -> {

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -16,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.material3.Icon
@@ -24,6 +26,7 @@ import androidx.wear.compose.material3.SplitSwitchButtonColors
 import androidx.wear.compose.material3.SwipeToReveal
 import androidx.wear.compose.material3.SwipeToRevealDefaults
 import androidx.wear.compose.material3.Text
+import davi.android.alarmapp.R
 import davi.android.alarmapp.domain.model.Alarm
 import davi.android.alarmapp.presentation.navigation.RouteEditAlarm
 import davi.android.alarmapp.presentation.screens.detailsAlarm.DayOfWeekIcon
@@ -46,8 +49,18 @@ fun AlarmItem(
         primaryAction = {
             PrimaryActionButton(
                 onClick = { alarmsViewModel.deleteAlarm(alarm) },
-                icon = { Icon(Icons.Outlined.Delete, contentDescription = "Delete") },
-                text = { Text("Excluir") },
+                icon = {
+                    Icon(
+                        Icons.Outlined.Delete,
+                        contentDescription = stringResource(R.string.exclude)
+                    )
+                },
+                text = {
+                    Text(
+                        stringResource(R.string.exclude),
+                        style = MaterialTheme.typography.labelSmall,
+                    )
+                },
                 modifier = Modifier.height(SwipeToRevealDefaults.LargeActionButtonHeight)
             )
         },
@@ -56,15 +69,30 @@ fun AlarmItem(
         undoPrimaryAction = {
             UndoActionButton(
                 onClick = { },
-                text = { Text("Cancelar") },
+                text = {
+                    Text(
+                        stringResource(R.string.cancel),
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                },
             )
         },
     ) {
         SplitSwitchButton(
             label = {
                 Column {
-                    Text("Horário do alarme", fontSize = 12.sp, color = Color.Black)
-                    Text(alarm.formattedTime(), fontSize = 16.sp, color = Color.Black)
+                    Text(
+                        stringResource(R.string.alarm_time),
+                        fontSize = 12.sp,
+                        color = Color.Black,
+                        style = MaterialTheme.typography.labelSmall
+                    )
+                    Text(
+                        alarm.formattedTime(),
+                        fontSize = 16.sp,
+                        color = Color.Black,
+                        style = MaterialTheme.typography.labelSmall
+                    )
                 }
             },
             secondaryLabel = {
@@ -106,12 +134,14 @@ fun AlarmItem(
                 }
             },
             colors = customSplitSwitchColors,
-            toggleContentDescription = "Split Switch Button Sample",
+            toggleContentDescription = stringResource(R.string.description_switch_button_activate_alarm),
             onContainerClick = {
                 backStack.add(RouteEditAlarm(alarm))
             },
             enabled = true,
-            modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 5.dp)
         )
     }
 }

@@ -8,6 +8,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.net.toUri
 import androidx.wear.compose.material3.TimePicker
 import androidx.wear.compose.material3.TimePickerDefaults
 import davi.android.alarmapp.domain.model.Alarm
@@ -17,6 +19,7 @@ import java.time.LocalTime
 
 @Composable
 fun EditAlarm(addAlarmViewModel: AddAlarmViewModel, backStack: SnapshotStateList<Any>, alarm: Alarm) {
+    val context = LocalContext.current
     var timePickerTime by remember {
         mutableStateOf(
             LocalTime.of(alarm.hour, alarm.min)
@@ -32,6 +35,7 @@ fun EditAlarm(addAlarmViewModel: AddAlarmViewModel, backStack: SnapshotStateList
             alarm.repeatDays.split(",").forEach { day ->
                 addAlarmViewModel.addToSelectedDays(day)
             }
+            addAlarmViewModel.ringtoneTitle.value = addAlarmViewModel.getRingtoneTitle(context, alarm.ringtone.toUri())
             backStack.add(RouteEditDetailsAlarm(alarm))
         },
         initialTime = timePickerTime,

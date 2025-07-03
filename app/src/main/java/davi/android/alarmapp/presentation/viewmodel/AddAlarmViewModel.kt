@@ -6,20 +6,30 @@ import android.app.Application
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.media.Ringtone
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Vibrator
 import android.os.VibratorManager
-import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import davi.android.alarmapp.R
 import davi.android.alarmapp.core.Constants
 import davi.android.alarmapp.data.dao.AlarmDao
 import davi.android.alarmapp.domain.model.Alarm
 import davi.android.alarmapp.receivers.AlarmReceiver
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class AddAlarmViewModel(private val application: Application, private val alarmDao: AlarmDao) : AndroidViewModel(application) {
+    private val appApplicationContext: Context = getApplication<Application>().applicationContext
     var days = ArrayList<String>()
     var minute = mutableIntStateOf(0)
     var hour = mutableIntStateOf(0)
@@ -27,9 +37,18 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
     var addVibration = MutableLiveData<Boolean>()
     var addSound = mutableStateOf(false)
     var addSnooze = mutableStateOf(false)
+
     private var vibrator: Vibrator
 
-    val listDays = arrayListOf("SEG", "TER", "QUA", "QUI", "SEX", "SAB", "DOM")
+    val listDays = arrayListOf(
+        appApplicationContext.getString(R.string.mon),
+        appApplicationContext.getString(R.string.tue),
+        appApplicationContext.getString(R.string.wed),
+        appApplicationContext.getString(R.string.thu),
+        appApplicationContext.getString(R.string.fri),
+        appApplicationContext.getString(R.string.sat),
+        appApplicationContext.getString(R.string.sun),
+    )
 
     var dayDomingo = mutableStateOf(false)
     var daySegunda = mutableStateOf(false)
@@ -38,6 +57,13 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
     var dayQuinta = mutableStateOf(false)
     var daySexta = mutableStateOf(false)
     var daySabado = mutableStateOf(false)
+
+    private val _ringtoneUri = MutableStateFlow<Uri?>(null) // Holds the selected URI
+    val ringtoneUri: StateFlow<Uri?> = _ringtoneUri.asStateFlow()
+
+    val ringtoneTitle: MutableState<String?> = mutableStateOf("")
+
+    private var currentRingtone: Ringtone? = null
 
     init {
         addVibration.value = false
@@ -49,7 +75,64 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
 
         val vibratorManager = application.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as? VibratorManager
         vibrator = vibratorManager?.defaultVibrator!!
+
+        getDefaultRingtoneUri(RingtoneManager.TYPE_ALARM)?.let { onRingtoneSelected(it) }
     }
+
+    fun onRingtoneSelected(uri: Uri?) {
+        _ringtoneUri.value = uri
+        if (uri != null) {
+            ringtoneTitle.value = getRingtoneTitle(getApplication(), uri)
+        } else {
+            ringtoneTitle.value = appApplicationContext.getString(R.string.silent)
+        }
+        stopPreview()
+    }
+
+    fun playPreview(uri: Uri?) {
+        if (uri == null) return
+        stopPreview()
+        viewModelScope.launch {
+            try {
+                currentRingtone = RingtoneManager.getRingtone(getApplication(), uri)
+                currentRingtone?.play()
+            } catch (e: Exception) {
+                ringtoneTitle.value = appApplicationContext.getString(R.string.error_playing_sound)
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun stopPreview() {
+        viewModelScope.launch {
+            currentRingtone?.let {
+                if (it.isPlaying)
+                    it.stop()
+            }
+            currentRingtone = null
+        }
+    }
+
+    fun getRingtoneTitle(context: Context, uri: Uri): String? {
+        return try {
+            val ringtone = RingtoneManager.getRingtone(context, uri)
+            val title = ringtone.getTitle(context)
+            title
+        } catch (e: Exception) {
+            e.printStackTrace()
+            context.getString(R.string.unknown_sound)
+        }
+    }
+
+    private fun getDefaultRingtoneUri(type: Int): Uri? {
+        return RingtoneManager.getDefaultUri(type)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        stopPreview()
+    }
+
 
     fun addToSelectedDays(day: String) {
         days.add(day)
@@ -68,6 +151,7 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
             alarm.repeatDays = days.joinToString(separator = ",") { it }
             alarm.min = minute.intValue
             alarm.hour = hour.intValue
+            alarm.ringtone = ringtoneUri.value.toString()
             alarm.disabled = true
             alarm.soundActive = addSound.value
             alarm.snoozeActive = addSnooze.value
@@ -75,10 +159,8 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
             val alarmIdFromDb = alarm.dbId
             alarmDao.update(alarm)
             scheduleAlarmInManager(alarm, alarmIdFromDb.toInt())
-            Log.d("AlarmUpdateDebug", "Alarm update successful (or at least the call completed).")
             return true
-        } catch (e: Exception) {
-            Log.e("AlarmUpdateDebug", "Error updating alarm in DAO", e)
+        } catch (_: Exception) {
             return false
         }
     }
@@ -93,7 +175,8 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
                 hour = hour.intValue,
                 disabled = true,
                 soundActive = addSound.value,
-                snoozeActive = addSnooze.value
+                snoozeActive = addSnooze.value,
+                ringtone = ringtoneUri.value.toString()
             )
             val alarmIdFromDb = alarmDao.insert(alarm)
             val alarmToSchedule = alarm.copy(dbId = alarmIdFromDb)
@@ -104,7 +187,6 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
         }
     }
 
-    // Extracted scheduling logic for clarity and reuse
     @SuppressLint("ScheduleExactAlarm")
     private fun scheduleAlarmInManager(alarm: Alarm, uniqueRequestCodeBase: Int) {
         val alarmManager = application.getSystemService(Context.ALARM_SERVICE) as AlarmManager

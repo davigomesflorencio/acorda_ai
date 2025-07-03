@@ -23,8 +23,8 @@ android {
         applicationId = "davi.android.alarmapp"
         minSdk = 33
         targetSdk = 36
-        versionCode = 9
-        versionName = "1.4.4"
+        versionCode = 10
+        versionName = "1.4.5"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -111,6 +111,8 @@ dependencies {
     implementation(libs.core.splashscreen)
     implementation(libs.compose.material3)
     androidTestImplementation(platform(libs.compose.bom))
+
+    implementation("com.microsoft.clarity:clarity-compose:3.+")
 
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)

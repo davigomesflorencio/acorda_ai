@@ -24,3 +24,6 @@ data class RouteEditAlarm(val alarm: Alarm) : NavKey
 
 @Serializable
 data class RouteEditDetailsAlarm(val alarm: Alarm) : NavKey
+
+@Serializable
+data object RouteRingtone : NavKey

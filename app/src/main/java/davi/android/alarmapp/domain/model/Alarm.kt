@@ -24,7 +24,11 @@ data class Alarm(
     @ColumnInfo(name = "soundActive")
     var soundActive: Boolean,
     @ColumnInfo(name = "snoozeActive")
-    var snoozeActive: Boolean
+    var snoozeActive: Boolean,
+    @ColumnInfo(name = "name")
+    var name: String = "",
+    @ColumnInfo(name = "ringtone")
+    var ringtone: String = "",
 ) {
     fun formattedTime(): String {
         return hour.toString().padStart(2, '0') + ":" + min.toString().padStart(2, '0')

@@ -9,6 +9,7 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import androidx.annotation.RequiresPermission
+import androidx.core.net.toUri
 import java.util.Date
 
 class ManagerVibrationAndSound(val context: Context) {
@@ -20,8 +21,13 @@ class ManagerVibrationAndSound(val context: Context) {
     fun init() {
         val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
         vibrator = vibratorManager.defaultVibrator
-        alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+        alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
         taskRingtone = RingtoneManager.getRingtone(context, alert)
+    }
+
+    fun setRingtone(uri: String) {
+        if (uri.isNotEmpty())
+            taskRingtone = RingtoneManager.getRingtone(context, uri.toUri())
     }
 
     fun playRingTone() {

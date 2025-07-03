@@ -25,22 +25,24 @@ class AlarmReceiver : BroadcastReceiver(), KoinComponent {
             val minute = intent.getIntExtra(Constants.EXTRA_ALARM_TIME_MINUTE, -1)
             val isSoundEnabled = intent.getBooleanExtra(Constants.EXTRA_ALARM_SOUND_ENABLED, true) // Default to true if not found
             val isVibrationEnabled = intent.getBooleanExtra(Constants.EXTRA_ALARM_VIBRATION_ENABLED, true) // Default to true if not found
+            val alarmRingtone = intent.getStringExtra(Constants.EXTRA_ALARM_RINGTONE_URI) ?: ""
             val alarmLabel = intent.getStringExtra(Constants.EXTRA_ALARM_LABEL) ?: "Alarm"
 
             val formattedTime = if (hour != -1 && minute != -1) {
                 String.format(Locale.getDefault(), "%02d:%02d", hour, minute)
             } else {
-                "Alarme"
+                "Alarm"
             }
 
             managerVibrationAndSound.init()
+            managerVibrationAndSound.setRingtone(alarmRingtone)
 
             if (isSoundEnabled)
                 managerVibrationAndSound.playRingTone()
             if (isVibrationEnabled)
                 managerVibrationAndSound.vibrateDevice()
 
-            sendNotification(context, "Alarme : $formattedTime")
+            sendNotification(context, "Alarm : $formattedTime")
 
         } else if (intent.action == Constants.NOTIFICATION_INTENT_ACTION_STOP_ALARM) {
             val alarmId = intent.getIntExtra(Constants.EXTRA_ALARM_ID, -1) // Get ID if needed

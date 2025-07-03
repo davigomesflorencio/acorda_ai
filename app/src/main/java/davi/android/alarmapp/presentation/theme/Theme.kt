@@ -33,7 +33,11 @@ fun AlarmAppTheme(
 
     val shapes = Shapes(largeIncreased = RoundedCornerShape(36.0.dp))
 
-    MaterialExpressiveTheme(colorScheme = darkColorScheme, shapes = shapes) {
+    MaterialExpressiveTheme(
+        colorScheme = darkColorScheme,
+        shapes = shapes,
+        typography = TypographyAcordai
+    ) {
         content()
     }
 }

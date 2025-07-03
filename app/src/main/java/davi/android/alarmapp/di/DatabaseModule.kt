@@ -16,6 +16,8 @@ val databaseModule = module {
             DatabaseConstants.ALARM_DATABASE
         )
             .addMigrations(MigrationAlarmDb.MIGRATION_7_8)
+            .addMigrations(MigrationAlarmDb.MIGRATION_8_9)
+            .addMigrations(MigrationAlarmDb.MIGRATION_9_10)
             .build()
     }
     single {

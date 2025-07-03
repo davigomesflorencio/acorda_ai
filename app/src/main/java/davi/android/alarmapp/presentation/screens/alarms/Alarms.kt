@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.itemsIndexed
@@ -39,6 +40,7 @@ import androidx.wear.compose.material3.EdgeButtonSize
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.SwitchButtonDefaults
 import androidx.wear.compose.material3.Text
+import davi.android.alarmapp.R
 import davi.android.alarmapp.presentation.navigation.RouteAddAlarm
 import davi.android.alarmapp.presentation.viewmodel.AlarmsViewModel
 
@@ -87,6 +89,10 @@ fun Alarms(
         if (activity?.shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) == false) {
             permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
+        if (activity?.shouldShowRequestPermissionRationale(Manifest.permission.READ_MEDIA_AUDIO) == false) {
+            permissionLauncher.launch(Manifest.permission.READ_MEDIA_AUDIO)
+        }
+
     }
 
     val customSplitSwitchColors = SwitchButtonDefaults.splitSwitchButtonColors(
@@ -122,8 +128,9 @@ fun Alarms(
                 ),
             ) {
                 Text(
-                    "Adicionar",
-                    color = Color.White
+                    stringResource(R.string.add),
+                    color = Color.White,
+                    style = MaterialTheme.typography.labelSmall
                 )
             }
         })
@@ -139,8 +146,9 @@ fun Alarms(
         ) {
             item {
                 Text(
-                    "Acordaí",
-                    color = Color.White
+                    stringResource(R.string.appname),
+                    color = Color.White,
+                    style = MaterialTheme.typography.titleLarge
                 )
             }
             itemsIndexed(alarmsScheduled) { index, item ->

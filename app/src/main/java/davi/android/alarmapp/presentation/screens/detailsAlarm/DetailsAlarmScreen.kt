@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberOverscrollEffect
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Card
@@ -19,15 +20,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
@@ -41,20 +42,27 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.SplitSwitchButton
 import androidx.wear.compose.material3.SwitchButtonDefaults
 import androidx.wear.compose.material3.Text
+import davi.android.alarmapp.R
 import davi.android.alarmapp.presentation.navigation.AlarmDaysWeekScreen
+import davi.android.alarmapp.presentation.navigation.RouteRingtone
 import davi.android.alarmapp.presentation.viewmodel.AddAlarmViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: SnapshotStateList<Any>) {
+fun DetailsAlarmScreen(
+    addAlarmViewModel: AddAlarmViewModel,
+    backStack: SnapshotStateList<Any>
+) {
     val scope = rememberCoroutineScope()
     val state = rememberScalingLazyListState()
     val horizontalPadding = LocalConfiguration.current.screenWidthDp.dp * 0.052f
     val verticalPadding = LocalConfiguration.current.screenHeightDp.dp * 0.16f
 
-    var soundActive by remember { mutableStateOf(false) }
-    var alarmVibrate by remember { mutableStateOf(false) }
-    var snoozeActive by remember { mutableStateOf(false) }
+    var soundActive by rememberSaveable { mutableStateOf(false) }
+    var alarmVibrate by rememberSaveable { mutableStateOf(false) }
+    var snoozeActive by rememberSaveable { mutableStateOf(false) }
+
+    val ringtoneTitle by addAlarmViewModel.ringtoneTitle
 
     val customSplitSwitchColors = SwitchButtonDefaults.splitSwitchButtonColors(
         checkedContainerColor = MaterialTheme.colorScheme.secondary,
@@ -99,8 +107,9 @@ fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: Snapshot
                 enabled = true
             ) {
                 Text(
-                    "Salvar",
-                    color = Color.White
+                    stringResource(R.string.save),
+                    color = Color.White,
+                    style = MaterialTheme.typography.labelSmall
                 )
             }
         })
@@ -117,9 +126,8 @@ fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: Snapshot
         ) {
             item {
                 Text(
-                    "Personalizar Alarme",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
+                    stringResource(R.string.customize_alarm),
+                    style = MaterialTheme.typography.titleMedium
                 )
             }
             item {
@@ -129,13 +137,19 @@ fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: Snapshot
                             backStack.add(AlarmDaysWeekScreen)
                         },
                         label = {
-                            Text("Repetir", fontSize = 14.sp, color = Color.Black)
+                            Text(
+                                stringResource(R.string.repeat),
+                                fontSize = 14.sp,
+                                color = Color.Black,
+                                style = MaterialTheme.typography.labelSmall
+                            )
                         },
                         secondaryLabel = {
                             if (addAlarmViewModel.days.isEmpty())
                                 Text(
-                                    "Desligado",
-                                    fontSize = 14.sp, color = Color.Black
+                                    text = stringResource(R.string.off),
+                                    color = Color.Black,
+                                    style = MaterialTheme.typography.labelSmall
                                 )
                             else {
                                 Column(
@@ -145,7 +159,7 @@ fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: Snapshot
                                         .padding(vertical = 5.dp)
                                 ) {
                                     Row(
-                                        horizontalArrangement = Arrangement.spacedBy(6.dp), // Space between day icons
+                                        horizontalArrangement = Arrangement.Center, // Space between day icons
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier = Modifier.fillMaxWidth()
                                     ) {
@@ -154,11 +168,12 @@ fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: Snapshot
                                                 dayInitial = initial.substring(0, 1),
                                                 isSelected = addAlarmViewModel.days.contains(initial)
                                             )
+                                            Spacer(Modifier.width(6.dp))
                                         }
                                     }
                                     Spacer(Modifier.height(3.dp))
                                     Row(
-                                        horizontalArrangement = Arrangement.spacedBy(6.dp), // Space between day icons
+                                        horizontalArrangement = Arrangement.Center, // Space between day icons
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier = Modifier.fillMaxWidth()
                                     ) {
@@ -167,6 +182,7 @@ fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: Snapshot
                                                 dayInitial = initial.substring(0, 1),
                                                 isSelected = addAlarmViewModel.days.contains(initial)
                                             )
+                                            Spacer(Modifier.width(6.dp))
                                         }
                                     }
                                 }
@@ -183,13 +199,16 @@ fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: Snapshot
                     HorizontalDivider()
                     SplitSwitchButton(
                         label = {
-                            Text("Som", fontSize = 14.sp)
+                            Text(
+                                stringResource(R.string.sound),
+                                style = MaterialTheme.typography.labelSmall
+                            )
                         },
                         checked = soundActive,
                         onCheckedChange = {
                             soundActive = it
                         },
-                        toggleContentDescription = "Split Switch Button Sample",
+                        toggleContentDescription = stringResource(R.string.description_switch_button_activate_alarm),
                         onContainerClick = {
                         },
                         enabled = true,
@@ -199,15 +218,44 @@ fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: Snapshot
                             .padding(8.dp)
                     )
                     HorizontalDivider()
+                    Chip(
+                        onClick = {
+                            backStack.add(RouteRingtone)
+                        },
+                        label = {
+                            Text(
+                                stringResource(R.string.select_alarm_sound),
+                                color = Color.Black,
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                        },
+                        secondaryLabel = {
+                            Text(
+                                ringtoneTitle ?: stringResource(R.string.silent_or_none),
+                                color = Color.Black,
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                        },
+                        colors = ChipDefaults.chipColors(
+                            backgroundColor = MaterialTheme.colorScheme.secondary
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    )
+                    HorizontalDivider()
                     SplitSwitchButton(
                         label = {
-                            Text("Vibração", fontSize = 14.sp)
+                            Text(
+                                stringResource(R.string.vibration),
+                                style = MaterialTheme.typography.labelSmall
+                            )
                         },
                         checked = alarmVibrate,
                         onCheckedChange = {
                             alarmVibrate = it
                         },
-                        toggleContentDescription = "Split Switch Button Sample",
+                        toggleContentDescription = stringResource(R.string.description_switch_button_activate_alarm),
                         onContainerClick = {
                         },
                         enabled = true,
@@ -219,16 +267,22 @@ fun DetailsAlarmScreen(addAlarmViewModel: AddAlarmViewModel, backStack: Snapshot
                     HorizontalDivider()
                     SplitSwitchButton(
                         label = {
-                            Text("Soneca", fontSize = 14.sp)
+                            Text(
+                                stringResource(R.string.snooze),
+                                style = MaterialTheme.typography.labelSmall
+                            )
                         },
                         secondaryLabel = {
-                            Text("5 minutos, 3 vezes", fontSize = 12.sp)
+                            Text(
+                                stringResource(R.string.minutes_3_times),
+                                style = MaterialTheme.typography.labelSmall
+                            )
                         },
                         checked = snoozeActive,
                         onCheckedChange = {
                             snoozeActive = it
                         },
-                        toggleContentDescription = "Split Switch Button Sample",
+                        toggleContentDescription = stringResource(R.string.description_switch_button_activate_alarm),
                         onContainerClick = {
                         },
                         enabled = true,

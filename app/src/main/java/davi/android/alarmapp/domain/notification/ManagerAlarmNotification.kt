@@ -24,7 +24,7 @@ class ManagerAlarmNotification(base: Context) : ContextWrapper(base) {
 
     private fun createNotificationChannel() {
         val name = "alarm_name"
-        val descriptionText = "Canal de Mensagens"
+        val descriptionText = "Channel Message Alarm App Acordaí"
         val importance = NotificationManager.IMPORTANCE_HIGH
         val channel = NotificationChannel(Constants.CHANNEL_ID, name, importance).apply {
             description = descriptionText
@@ -57,10 +57,10 @@ class ManagerAlarmNotification(base: Context) : ContextWrapper(base) {
             .setOngoing(true)
             .addAction(
                 R.drawable.ic_baseline_stop_24,
-                "Parar",
+                "Stop",
                 stopAlarmTone(this)
             )
-            .addAction(R.drawable.ic_baseline_snooze_24, "Soneca", snoozeAlarm(this))
+            .addAction(R.drawable.ic_baseline_snooze_24, "Snooze", snoozeAlarm(this))
 
     }
 
