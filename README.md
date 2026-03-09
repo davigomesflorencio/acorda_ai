@@ -1,6 +1,11 @@
+<div>
+<img src="./screenshots/photo.jpeg" alt="drawing" style="width:auto;"/>
+
+</div>
+
 # Acordaí - Smart Alarm for Wear OS
 
-[![Build and Release APK](https://github.com/davigomesflorencio/alarm_wear_app/actions/workflows/kotlin.yaml/badge.svg)](https://github.com/davigomesflorencio/alarm_wear_app/actions/workflows/kotlin.yaml)
+[![Get it on Google Play](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=davi.android.alarmapp)
 
 ## Latest Updates
 
@@ -70,4 +75,5 @@ This project serves as a practical demonstration of **Material 3 Expressive** an
 4. Run the project on a Wear OS emulator or physical device.
 
 ---
+
 Developed by [Davi Gomes Florencio](https://github.com/davigomesflorencio)
