@@ -9,18 +9,17 @@ import android.content.Intent
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
-import android.os.Vibrator
-import android.os.VibratorManager
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import davi.android.alarmapp.R
 import davi.android.alarmapp.core.Constants
 import davi.android.alarmapp.data.dao.AlarmDao
 import davi.android.alarmapp.domain.model.Alarm
+import davi.android.alarmapp.domain.vibration.ManagerVibrationAndSound
 import davi.android.alarmapp.receivers.AlarmReceiver
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,15 +29,15 @@ import java.util.Calendar
 
 class AddAlarmViewModel(private val application: Application, private val alarmDao: AlarmDao) : AndroidViewModel(application) {
     private val appApplicationContext: Context = getApplication<Application>().applicationContext
-    var days = ArrayList<String>()
+    val days = mutableStateListOf<String>() // Changed to mutableStateListOf
     var minute = mutableIntStateOf(0)
     var hour = mutableIntStateOf(0)
 
-    var addVibration = MutableLiveData<Boolean>()
+    var addVibration = mutableStateOf(false)
     var addSound = mutableStateOf(false)
     var addSnooze = mutableStateOf(false)
 
-    private var vibrator: Vibrator
+    val managerVibrationAndSound = ManagerVibrationAndSound(appApplicationContext)
 
     val listDays = arrayListOf(
         appApplicationContext.getString(R.string.mon),
@@ -58,7 +57,7 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
     var daySexta = mutableStateOf(false)
     var daySabado = mutableStateOf(false)
 
-    private val _ringtoneUri = MutableStateFlow<Uri?>(null) // Holds the selected URI
+    private val _ringtoneUri = MutableStateFlow<Uri?>(null)
     val ringtoneUri: StateFlow<Uri?> = _ringtoneUri.asStateFlow()
 
     val ringtoneTitle: MutableState<String?> = mutableStateOf("")
@@ -66,15 +65,13 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
     private var currentRingtone: Ringtone? = null
 
     init {
-        addVibration.value = false
         addSound.value = false
 
-        val calendar = android.icu.util.Calendar.getInstance()
+        val calendar = Calendar.getInstance()
         minute.intValue = calendar.get(Calendar.HOUR_OF_DAY)
         hour.intValue = calendar.get(Calendar.MINUTE)
 
-        val vibratorManager = application.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as? VibratorManager
-        vibrator = vibratorManager?.defaultVibrator!!
+        managerVibrationAndSound.init()
 
         getDefaultRingtoneUri(RingtoneManager.TYPE_ALARM)?.let { onRingtoneSelected(it) }
     }
@@ -135,19 +132,20 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
 
 
     fun addToSelectedDays(day: String) {
-        days.add(day)
-        val modified = days.distinct()
-        days = arrayListOf()
-        days.addAll(modified)
+        if (!days.contains(day)) {
+            days.add(day)
+        }
     }
 
     fun removeFromSelectedDays(day: String) {
-        days.remove(day)
+        if (days.contains(day)) {
+            days.remove(day)
+        }
     }
 
     suspend fun updateAlarm(alarm: Alarm): Boolean {
         try {
-            alarm.vibration = addVibration.value!!
+            alarm.vibration = addVibration.value
             alarm.repeatDays = days.joinToString(separator = ",") { it }
             alarm.min = minute.intValue
             alarm.hour = hour.intValue
@@ -160,7 +158,8 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
             alarmDao.update(alarm)
             scheduleAlarmInManager(alarm, alarmIdFromDb.toInt())
             return true
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            e.printStackTrace()
             return false
         }
     }
@@ -169,7 +168,7 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
         try {
             val alarm = Alarm(
                 dbId = 0,
-                vibration = addVibration.value!!,
+                vibration = addVibration.value,
                 repeatDays = days.joinToString(separator = ",") { it },
                 min = minute.intValue,
                 hour = hour.intValue,
@@ -182,7 +181,8 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
             val alarmToSchedule = alarm.copy(dbId = alarmIdFromDb)
             scheduleAlarmInManager(alarmToSchedule, alarmIdFromDb.toInt())
             return true
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            e.printStackTrace()
             return false
         }
     }
@@ -192,7 +192,6 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
         val alarmManager = application.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         if (alarm.repeatDays.isEmpty()) {
-            // Non-repeating alarm
             val calendar = Calendar.getInstance().apply {
                 set(Calendar.HOUR_OF_DAY, alarm.hour)
                 set(Calendar.MINUTE, alarm.min)
@@ -200,12 +199,11 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
                 set(Calendar.MILLISECOND, 0)
             }
             if (calendar.before(Calendar.getInstance())) {
-                calendar.add(Calendar.DATE, 1) // If time has passed today, set for tomorrow
+                calendar.add(Calendar.DATE, 1)
             }
 
             val alarmIntent = Intent(application, AlarmReceiver::class.java).apply {
                 action = Constants.NOTIFICATION_INTENT_ACTION_START_ALARM
-                // Pass the database ID, so the receiver knows which alarm to handle
                 putExtra(Constants.ALARM_ID_EXTRA, alarm.dbId)
                 putExtra(Constants.EXTRA_ALARM_TIME_HOUR, alarm.hour)
                 putExtra(Constants.EXTRA_ALARM_TIME_MINUTE, alarm.min)
@@ -214,7 +212,7 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
             }
             val pendingIntent = PendingIntent.getBroadcast(
                 application,
-                uniqueRequestCodeBase, // Use the alarm's database ID as the request code for uniqueness
+                uniqueRequestCodeBase,
                 alarmIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
@@ -222,9 +220,9 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
 
         } else {
             val selectedDaysList = alarm.repeatDays.split(",")
-            selectedDaysList.forEachIndexed { index, dayString ->
-                val dayOfWeek = selectDayOfWeek(dayString) // Ensure this returns Calendar.DAY_OF_WEEK constants
-                if (dayOfWeek == -1) return@forEachIndexed // Skip if day string is invalid
+            selectedDaysList.forEachIndexed { _, dayString ->
+                val dayOfWeek = selectDayOfWeek(dayString)
+                if (dayOfWeek == -1) return@forEachIndexed
 
                 val calendar: Calendar = Calendar.getInstance().apply {
                     set(Calendar.HOUR_OF_DAY, alarm.hour)
@@ -235,14 +233,13 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
                 }
 
                 if (calendar.before(Calendar.getInstance())) {
-                    calendar.add(Calendar.WEEK_OF_YEAR, 1) // If time passed this week, schedule for next week
+                    calendar.add(Calendar.WEEK_OF_YEAR, 1)
                 }
 
-                val requestCodeForRepeating = uniqueRequestCodeBase + dayOfWeek // Or use index, ensure it's unique
+                val requestCodeForRepeating = uniqueRequestCodeBase + dayOfWeek
 
                 val alarmIntent = Intent(application, AlarmReceiver::class.java).apply {
                     action = Constants.NOTIFICATION_INTENT_ACTION_START_ALARM
-                    putExtra(Constants.ALARM_ID_EXTRA, alarm.dbId)
                     putExtra(Constants.ALARM_ID_EXTRA, alarm.dbId)
                     putExtra(Constants.EXTRA_ALARM_TIME_HOUR, alarm.hour)
                     putExtra(Constants.EXTRA_ALARM_TIME_MINUTE, alarm.min)
@@ -261,38 +258,17 @@ class AddAlarmViewModel(private val application: Application, private val alarmD
     }
 
 
-    fun selectDayOfWeek(element: String): Int {
-        when (element) {
-            "SEG" -> {
-                return Calendar.MONDAY
-            }
-
-            "TER" -> {
-                return Calendar.TUESDAY
-            }
-
-            "QUA" -> {
-                return Calendar.WEDNESDAY
-            }
-
-            "QUI" -> {
-                return Calendar.THURSDAY
-            }
-
-            "SEX" -> {
-                return Calendar.FRIDAY
-            }
-
-            "SAB" -> {
-                return Calendar.SATURDAY
-            }
-
-            "DOM" -> {
-                return Calendar.SUNDAY
-            }
+    fun selectDayOfWeek(day: String): Int {
+        return when (day) {
+            appApplicationContext.getString(R.string.sun) -> Calendar.SUNDAY
+            appApplicationContext.getString(R.string.mon) -> Calendar.MONDAY
+            appApplicationContext.getString(R.string.tue) -> Calendar.TUESDAY
+            appApplicationContext.getString(R.string.wed) -> Calendar.WEDNESDAY
+            appApplicationContext.getString(R.string.thu) -> Calendar.THURSDAY
+            appApplicationContext.getString(R.string.fri) -> Calendar.FRIDAY
+            appApplicationContext.getString(R.string.sat) -> Calendar.SATURDAY
+            else -> -1
         }
-        return -1
     }
 
 }
-

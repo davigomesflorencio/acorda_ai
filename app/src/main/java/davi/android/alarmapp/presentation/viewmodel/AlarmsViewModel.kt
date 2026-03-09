@@ -89,7 +89,7 @@ class AlarmsViewModel(
                 pendingIntent.cancel()
             } else {
                 val selectedDaysList = alarm.repeatDays.split(",")
-                selectedDaysList.forEachIndexed { index, dayString ->
+                selectedDaysList.forEachIndexed { _, dayString ->
                     val dayOfWeek = selectDayOfWeek(dayString)
                     if (dayOfWeek == -1) return@forEachIndexed
 
