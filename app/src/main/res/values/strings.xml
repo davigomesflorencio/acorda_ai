@@ -10,7 +10,7 @@
     <string name="description_play_preview">Play Preview</string>
     <string name="description_stop_preview">Stop Preview</string>
     <string name="description_change_sound">Change Sound</string>
-    <string name="selected_ringtone">Select ringtone</string>
+    <string name="selected_ringtone">Selected ringtone</string>
     <string name="silent_or_none">Silent or None</string>
     <string name="silent">Silent</string>
     <string name="alarm_ringtone">Alarm Ringtone</string>
@@ -34,4 +34,73 @@
     <string name="sat">SAT</string>
     <string name="seg">SEG</string>
     <string name="unknown_sound">Unknown Sound</string>
+    <string name="config">Configurations</string>
+    <string name="settings_title">Settings</string>
+    <string name="about_title">About</string>
+    <string name="about_description">Wake Up! is a smart alarm app developed specifically for Wear OS devices. Its focus is to offer a modern, fluid, and visually appealing experience directly on your smartwatch, using the latest Android design and navigation standards.\n\nThis project was created as a practical demonstration of the application of Material 3 Expressive and Material Navigation 3, technologies that ensure a more intuitive and accessible interface aligned with current Android guidelines for wearable devices.</string>
+    <string name="terms_of_use">Terms of Use</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="app_version">App Version: %1$s</string>
+    <string name="rate_app">Rate the App</string>
+    <string name="privacy_policy_title">Privacy Policy : Acordai</string>
+    <string name="privacy_policy_content">
+        Last update: 09/06/2025\n\n
+        The Wake Up! application respects your privacy. This policy aims to clarify how your data is treated when using our app.
+1. Data Collection\n\n
+
+        Wake Up! does not collect, store, or share any personal user information.\n\n
+
+        The application works exclusively on your Wear OS smartwatch and does not communicate with external servers.\n\n
+        2. Permissions Used\n\n
+
+        The app requests only the necessary permissions to:\n\n
+
+        Set local alarms on your Wear OS device.\n\n
+        These permissions are used only for the basic functioning of the application and are not used for analysis, tracking, or advertising purposes.\n\n
+        3. Data Sharing\n\n
+
+        There is no data sharing with third parties. Wake Up! does not send, transmit, or share any user information with other companies, applications, or services.\n\n
+        4. Security\n\n
+
+        Although the application does not collect data, it is developed following good Android security practices to ensure integrity and proper functioning on your device.\n\n
+        5. Changes to this Policy\n\n
+
+        This policy may be updated if the apps operation changes in the future. Any changes will be informed on this page.\n\n
+
+        6. Contact\n\n
+
+        If you have any questions about this Privacy Policy, please contact us by email:\n\n
+
+        davigomesflorencio@gmail.com
+    </string>
+    <string name="terms_of_use_title">Terms of Use: Acordaí!</string>
+    <string name="terms_of_use_content">These Terms of Use govern the use of the Wake Up! application ("the Application"). By accessing or using the Application, you agree to comply with and be bound by these Terms.\n\n
+        1. Use of the Application\n
+
+        The Application was developed to function as an alarm clock on Wear OS devices. You agree to use the Application only for lawful purposes and in accordance with these Terms.\n\n
+        2. Intellectual Property\n
+
+        All content, features, and functionality (including, but not limited to, all source code, text, graphics, logos, icons, images, and their selection and arrangement) are the property of Wake Up!, its licensors, or other providers of such material and are protected by copyright, trademark, patent, and other intellectual property laws.\n\n
+        3. Disclaimer of Warranties\n
+
+        The Application is provided "as is" and "as available," without warranties of any kind, express or implied, including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, and non-infringement.\n
+
+        4. Limitation of Liability\n
+
+        Under no circumstances shall Wake Up!, its affiliates, its licensors, service providers, employees, agents, directors, and managers be liable for damages of any kind, under any legal theory, arising out of or in connection with your use, or inability to use, the Application.\n\n
+        5. Changes to the Terms of Use\n
+
+        We may revise and update these Terms of Use from time to time, at our sole discretion. All changes are effective immediately when we post them and apply to all access and use of the Application thereafter.\n\n
+        6. Applicable Law and Jurisdiction\n
+
+        These Terms of Use shall be governed by and construed in accordance with the laws of [Country/State where the developer is located], without giving effect to any principles of conflicts of law.\n\n
+        7. Contact\n
+
+        If you have any questions about these Terms of Use, please contact us by email: 📧 davigomesflorencio@gmail.com
+    </string>
+    <string name="github">GitHub</string>
+    <string name="portfolio">Portfolio - Davi Gomes Florencio</string>
+    <string name="permission_alarm_exact_necessary">Exact Alarm Permission Necessary</string>
+    <string name="text_dialog_permission_alarm_exact">Your alarm application needs permission to schedule exact alarms to function correctly. Please grant this permission in system settings.</string>
+    <string name="go_settings">Go to Settings</string>
 </resources>
