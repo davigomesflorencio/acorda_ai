@@ -9,13 +9,19 @@ import android.content.Intent
 import android.content.IntentFilter
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberOverscrollEffect
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -29,19 +35,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.itemsIndexed
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.EdgeButtonSize
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.SwitchButtonDefaults
-import androidx.wear.compose.material3.Text
 import davi.android.alarmapp.R
 import davi.android.alarmapp.presentation.navigation.RouteAddAlarm
+import davi.android.alarmapp.presentation.navigation.RouteSettings
 import davi.android.alarmapp.presentation.viewmodel.AlarmsViewModel
 
 @Composable
@@ -100,12 +108,12 @@ fun Alarms(
         uncheckedContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
         checkedContentColor = Color.White,
         uncheckedContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
-        checkedSplitContainerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+        checkedSplitContainerColor = MaterialTheme.colorScheme.primaryContainer,
         uncheckedSplitContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
         checkedThumbIconColor = Color.White,
         checkedThumbColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
-        checkedTrackColor = MaterialTheme.colorScheme.onSecondaryContainer,
-        checkedTrackBorderColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        checkedTrackColor = MaterialTheme.colorScheme.secondary,
+        checkedTrackBorderColor = MaterialTheme.colorScheme.secondary,
     )
 
     ScreenScaffold(
@@ -145,6 +153,13 @@ fun Alarms(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
+                Image(
+                    painterResource(R.drawable.ic_logo),
+                    contentDescription = "Image",
+                    modifier = Modifier.size(64.dp)
+                )
+            }
+            item {
                 Text(
                     stringResource(R.string.appname),
                     color = Color.White,
@@ -153,6 +168,26 @@ fun Alarms(
             }
             itemsIndexed(alarmsScheduled) { index, item ->
                 AlarmItem(alarmsViewModel, backStack, item, customSplitSwitchColors)
+            }
+            item {
+                Button(
+                    onClick = { backStack.add(RouteSettings) }, // Navigate to settings
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Icon(
+                        painterResource(R.drawable.ic_settings),
+                        contentDescription = "Config",
+                        tint = MaterialTheme.colorScheme.primaryContainer
+                    )
+                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                    Text(
+                        stringResource(R.string.config),
+                        color = Color.Black,
+                    )
+                }
             }
         }
     }

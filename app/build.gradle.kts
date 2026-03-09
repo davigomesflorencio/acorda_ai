@@ -23,8 +23,8 @@ android {
         applicationId = "davi.android.alarmapp"
         minSdk = 33
         targetSdk = 36
-        versionCode = 10
-        versionName = "1.4.5"
+        versionCode = 11
+        versionName = "1.5.0"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -99,6 +99,7 @@ dependencies {
 
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.ui.text.google.fonts)
     annotationProcessor(libs.androidx.room.compiler)
     ksp(libs.androidx.room.compiler)
 

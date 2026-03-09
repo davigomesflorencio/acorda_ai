@@ -104,7 +104,7 @@ fun AlarmItem(
                         ) {
                             alarmsViewModel.listDays.subList(0, 4).forEachIndexed { index, initial ->
                                 DayOfWeekIcon(
-                                    dayInitial = initial.substring(0, 1),
+                                    dayInitial = initial.take(1),
                                     isSelected = alarm.repeatDays.split(",").contains(initial),
                                     modifier = Modifier.padding(horizontal = 1.2.dp)
                                 )

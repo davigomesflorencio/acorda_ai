@@ -179,7 +179,7 @@ fun DetailsAlarmScreen(
                                     ) {
                                         addAlarmViewModel.listDays.subList(4, 7).forEachIndexed { index, initial ->
                                             DayOfWeekIcon(
-                                                dayInitial = initial.substring(0, 1),
+                                                dayInitial = initial.take(1),
                                                 isSelected = addAlarmViewModel.days.contains(initial)
                                             )
                                             Spacer(Modifier.width(6.dp))

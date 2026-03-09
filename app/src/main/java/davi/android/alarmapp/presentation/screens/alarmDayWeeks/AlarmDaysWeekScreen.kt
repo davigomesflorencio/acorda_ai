@@ -8,17 +8,24 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberOverscrollEffect
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.graphics.shapes.RoundedPolygon
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material.Text
@@ -29,14 +36,16 @@ import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.EdgeButtonSize
 import androidx.wear.compose.material3.ScreenScaffold
 import davi.android.alarmapp.R
+import davi.android.alarmapp.presentation.navigation.RouteSplash
+import davi.android.alarmapp.presentation.theme.AlarmAppTheme
 import davi.android.alarmapp.presentation.viewmodel.AddAlarmViewModel
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AlarmDaysWeekScreen(
-    addAlarmViewModel: AddAlarmViewModel,
+    addAlarmViewModel: AddAlarmViewModel = viewModel(),
     backStack: SnapshotStateList<Any>
 ) {
-    val context = LocalContext.current
     val state = rememberScalingLazyListState()
     val horizontalPadding = LocalConfiguration.current.screenWidthDp.dp * 0.052f
     val verticalPadding = LocalConfiguration.current.screenHeightDp.dp * 0.16f
@@ -52,6 +61,14 @@ fun AlarmDaysWeekScreen(
     var dayQuinta by addAlarmViewModel.dayQuinta
     var daySexta by addAlarmViewModel.daySexta
     var daySabado by addAlarmViewModel.daySabado
+
+    val sunString = stringResource(R.string.sun)
+    val monString = stringResource(R.string.mon)
+    val tueString = stringResource(R.string.tue)
+    val wedString = stringResource(R.string.wed)
+    val thuString = stringResource(R.string.thu)
+    val friString = stringResource(R.string.fri)
+    val satString = stringResource(R.string.sat)
 
     ScreenScaffold(
         scrollState = state,
@@ -93,15 +110,16 @@ fun AlarmDaysWeekScreen(
                         onCheckedChange = {
                             dayDomingo = !dayDomingo
                             if (dayDomingo) {
-                                addAlarmViewModel.addToSelectedDays(context.getString(R.string.sun))
+                                addAlarmViewModel.addToSelectedDays(sunString)
                             } else {
-                                addAlarmViewModel.removeFromSelectedDays(context.getString(R.string.sun))
+                                addAlarmViewModel.removeFromSelectedDays(sunString)
                             }
                         },
+                        shape = RoundedPolygon(MaterialShapes.Cookie6Sided).toShape(0),
                         colors = toggleBtColor
                     ) {
                         Text(
-                            context.getString(R.string.sun),
+                            sunString,
                             style = MaterialTheme.typography.labelSmall
                         )
                     }
@@ -110,15 +128,16 @@ fun AlarmDaysWeekScreen(
                         onCheckedChange = {
                             daySegunda = !daySegunda
                             if (daySegunda) {
-                                addAlarmViewModel.addToSelectedDays(context.getString(R.string.mon))
+                                addAlarmViewModel.addToSelectedDays(monString)
                             } else {
-                                addAlarmViewModel.removeFromSelectedDays(context.getString(R.string.mon))
+                                addAlarmViewModel.removeFromSelectedDays(monString)
                             }
                         },
+                        shape = RoundedPolygon(MaterialShapes.Cookie6Sided).toShape(0),
                         colors = toggleBtColor
                     ) {
                         Text(
-                            context.getString(R.string.mon),
+                            monString,
                             style = MaterialTheme.typography.labelSmall
                         )
                     }
@@ -131,15 +150,16 @@ fun AlarmDaysWeekScreen(
                         onCheckedChange = {
                             dayTerca = !dayTerca
                             if (dayTerca) {
-                                addAlarmViewModel.addToSelectedDays(context.getString(R.string.tue))
+                                addAlarmViewModel.addToSelectedDays(tueString)
                             } else {
-                                addAlarmViewModel.removeFromSelectedDays(context.getString(R.string.tue))
+                                addAlarmViewModel.removeFromSelectedDays(tueString)
                             }
                         },
+                        shape = RoundedPolygon(MaterialShapes.Cookie6Sided).toShape(0),
                         colors = toggleBtColor
                     ) {
                         Text(
-                            context.getString(R.string.tue),
+                            tueString,
                             style = MaterialTheme.typography.labelSmall
                         )
                     }
@@ -148,15 +168,16 @@ fun AlarmDaysWeekScreen(
                         onCheckedChange = {
                             dayQuarta = !dayQuarta
                             if (dayQuarta) {
-                                addAlarmViewModel.addToSelectedDays(context.getString(R.string.wed))
+                                addAlarmViewModel.addToSelectedDays(wedString)
                             } else {
-                                addAlarmViewModel.removeFromSelectedDays(context.getString(R.string.wed))
+                                addAlarmViewModel.removeFromSelectedDays(wedString)
                             }
                         },
+                        shape = RoundedPolygon(MaterialShapes.Cookie6Sided).toShape(0),
                         colors = toggleBtColor
                     ) {
                         Text(
-                            context.getString(R.string.wed),
+                            wedString,
                             style = MaterialTheme.typography.labelSmall
                         )
                     }
@@ -165,15 +186,16 @@ fun AlarmDaysWeekScreen(
                         onCheckedChange = {
                             dayQuinta = !dayQuinta
                             if (dayQuinta) {
-                                addAlarmViewModel.addToSelectedDays(context.getString(R.string.thu))
+                                addAlarmViewModel.addToSelectedDays(thuString)
                             } else {
-                                addAlarmViewModel.removeFromSelectedDays(context.getString(R.string.thu))
+                                addAlarmViewModel.removeFromSelectedDays(thuString)
                             }
                         },
+                        shape = RoundedPolygon(MaterialShapes.Cookie6Sided).toShape(0),
                         colors = toggleBtColor
                     ) {
                         Text(
-                            context.getString(R.string.thu),
+                            thuString,
                             style = MaterialTheme.typography.labelSmall
                         )
                     }
@@ -186,15 +208,16 @@ fun AlarmDaysWeekScreen(
                         onCheckedChange = {
                             daySexta = !daySexta
                             if (daySexta) {
-                                addAlarmViewModel.addToSelectedDays(context.getString(R.string.fri))
+                                addAlarmViewModel.addToSelectedDays(friString)
                             } else {
-                                addAlarmViewModel.removeFromSelectedDays(context.getString(R.string.fri))
+                                addAlarmViewModel.removeFromSelectedDays(friString)
                             }
                         },
+                        shape = RoundedPolygon(MaterialShapes.Cookie6Sided).toShape(0),
                         colors = toggleBtColor
                     ) {
                         Text(
-                            context.getString(R.string.fri),
+                            friString,
                             style = MaterialTheme.typography.labelSmall
                         )
                     }
@@ -203,20 +226,30 @@ fun AlarmDaysWeekScreen(
                         onCheckedChange = {
                             daySabado = !daySabado
                             if (daySabado) {
-                                addAlarmViewModel.addToSelectedDays(context.getString(R.string.sat))
+                                addAlarmViewModel.addToSelectedDays(satString)
                             } else {
-                                addAlarmViewModel.removeFromSelectedDays(context.getString(R.string.sat))
+                                addAlarmViewModel.removeFromSelectedDays(satString)
                             }
                         },
+                        shape = RoundedPolygon(MaterialShapes.Cookie6Sided).toShape(0),
                         colors = toggleBtColor
                     ) {
                         Text(
-                            context.getString(R.string.sat),
+                            satString,
                             style = MaterialTheme.typography.labelSmall
                         )
                     }
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun PreviewAlarmDaysWeekScreen() {
+    val backStack = remember { mutableStateListOf<Any>(RouteSplash) }
+    AlarmAppTheme {
+        AlarmDaysWeekScreen(backStack = backStack)
     }
 }

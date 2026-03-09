@@ -36,8 +36,8 @@ class ManagerVibrationAndSound(val context: Context) {
 
     fun stopRingTone() {
         taskRingtone?.let {
-            if (taskRingtone!!.isPlaying)
-                taskRingtone?.stop()
+            if (it.isPlaying)
+                it.stop()
         }
     }
 

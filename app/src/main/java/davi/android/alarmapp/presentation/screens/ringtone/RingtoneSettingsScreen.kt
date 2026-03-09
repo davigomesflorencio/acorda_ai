@@ -34,7 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -57,7 +56,6 @@ fun RingtoneSettingsScreen(
     viewModel: AddAlarmViewModel,
     backStack: SnapshotStateList<Any>
 ) {
-    val context = LocalContext.current
     val state = rememberScalingLazyListState()
     val horizontalPadding = LocalConfiguration.current.screenWidthDp.dp * 0.052f
     val verticalPadding = LocalConfiguration.current.screenHeightDp.dp * 0.16f
@@ -73,11 +71,11 @@ fun RingtoneSettingsScreen(
             viewModel.onRingtoneSelected(uri) // ViewModel handles nullability and fetching title
         }
     }
-
+    val title = stringResource(R.string.select_alarm_sound)
     fun openRingtonePicker() {
         val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER).apply {
             putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM) // Or TYPE_NOTIFICATION
-            putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, context.getString(R.string.select_alarm_sound))
+            putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, title)
             putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, selectedRingtoneUri)
             putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
             putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)

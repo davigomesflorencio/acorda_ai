@@ -49,6 +49,6 @@ fun SplashScreen(backStack: SnapshotStateList<Any>) {
 
 @Preview(device = SMALL_ROUND)
 @Composable
-fun preview(){
+fun preview() {
     SplashScreen(backStack = SnapshotStateList())
 }

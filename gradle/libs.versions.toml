@@ -1,5 +1,5 @@
 [versions]
-agp = "8.12.0-alpha01"
+agp = "8.12.3"
 kotlin = "2.0.21"
 material3Android = "1.4.0-alpha14"
 materialIconsExtended = "1.7.8"
@@ -19,6 +19,7 @@ room = "2.7.1"
 koin = "3.4.3"
 junit = "4.13.2"
 work = "2.8.0"
+uiTextGoogleFonts = "1.10.4"
 
 [libraries]
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
@@ -54,6 +55,7 @@ koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = 
 junit = { module = "junit:junit", version.ref = "junit" }
 androidx-work-runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
 koin-work-manager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koin" }
+androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

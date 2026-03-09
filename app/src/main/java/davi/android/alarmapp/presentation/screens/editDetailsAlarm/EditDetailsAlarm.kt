@@ -50,7 +50,11 @@ import davi.android.alarmapp.presentation.viewmodel.AddAlarmViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun EditDetailsAlarm(addAlarmViewModel: AddAlarmViewModel, backStack: SnapshotStateList<Any>, alarm: Alarm) {
+fun EditDetailsAlarm(
+    addAlarmViewModel: AddAlarmViewModel,
+    backStack: SnapshotStateList<Any>,
+    alarm: Alarm
+) {
     val scope = rememberCoroutineScope()
     val state = rememberScalingLazyListState()
     val horizontalPadding = LocalConfiguration.current.screenWidthDp.dp * 0.052f
@@ -76,17 +80,6 @@ fun EditDetailsAlarm(addAlarmViewModel: AddAlarmViewModel, backStack: SnapshotSt
         checkedTrackColor = MaterialTheme.colorScheme.onSecondaryContainer,
         checkedTrackBorderColor = MaterialTheme.colorScheme.onSecondaryContainer,
     )
-
-    LaunchedEffect(Unit) {
-        val listDays = alarm.repeatDays.split(",")
-        addAlarmViewModel.dayDomingo.value = listDays.contains("DOM")
-        addAlarmViewModel.daySegunda.value = listDays.contains("SEG")
-        addAlarmViewModel.dayTerca.value = listDays.contains("TER")
-        addAlarmViewModel.dayQuarta.value = listDays.contains("QUA")
-        addAlarmViewModel.dayQuinta.value = listDays.contains("QUI")
-        addAlarmViewModel.daySexta.value = listDays.contains("SEX")
-        addAlarmViewModel.daySabado.value = listDays.contains("SAB")
-    }
 
     ScreenScaffold(
         scrollState = state,
@@ -180,9 +173,9 @@ fun EditDetailsAlarm(addAlarmViewModel: AddAlarmViewModel, backStack: SnapshotSt
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier = Modifier.fillMaxWidth()
                                     ) {
-                                        addAlarmViewModel.listDays.subList(0, 4).forEachIndexed { index, initial ->
+                                        addAlarmViewModel.listDays.subList(0, 4).forEachIndexed { _, initial ->
                                             DayOfWeekIcon(
-                                                dayInitial = initial.substring(0, 1),
+                                                dayInitial = initial.take(1),
                                                 isSelected = addAlarmViewModel.days.contains(initial),
                                                 modifier = Modifier.padding(horizontal = 6.dp)
                                             )
@@ -194,9 +187,9 @@ fun EditDetailsAlarm(addAlarmViewModel: AddAlarmViewModel, backStack: SnapshotSt
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier = Modifier.fillMaxWidth()
                                     ) {
-                                        addAlarmViewModel.listDays.subList(4, 7).forEachIndexed { index, initial ->
+                                        addAlarmViewModel.listDays.subList(4, 7).forEachIndexed { _, initial ->
                                             DayOfWeekIcon(
-                                                dayInitial = initial.substring(0, 1),
+                                                dayInitial = initial.take(1),
                                                 isSelected = addAlarmViewModel.days.contains(initial),
                                                 modifier = Modifier.padding(horizontal = 6.dp)
                                             )

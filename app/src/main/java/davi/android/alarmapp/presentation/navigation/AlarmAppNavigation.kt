@@ -11,14 +11,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
+import davi.android.alarmapp.presentation.screens.about.About
 import davi.android.alarmapp.presentation.screens.addAlarm.AddAlarm
 import davi.android.alarmapp.presentation.screens.alarmDayWeeks.AlarmDaysWeekScreen
 import davi.android.alarmapp.presentation.screens.alarms.Alarms
 import davi.android.alarmapp.presentation.screens.detailsAlarm.DetailsAlarmScreen
 import davi.android.alarmapp.presentation.screens.editAlarm.EditAlarm
 import davi.android.alarmapp.presentation.screens.editDetailsAlarm.EditDetailsAlarm
+import davi.android.alarmapp.presentation.screens.privacypolicy.PrivacyPolicy
 import davi.android.alarmapp.presentation.screens.ringtone.RingtoneSettingsScreen
+import davi.android.alarmapp.presentation.screens.settings.Settings
 import davi.android.alarmapp.presentation.screens.splash.SplashScreen
+import davi.android.alarmapp.presentation.screens.termsofuse.TermsOfUse
 import davi.android.alarmapp.presentation.viewmodel.AddAlarmViewModel
 import davi.android.alarmapp.presentation.viewmodel.AlarmsViewModel
 
@@ -66,6 +70,22 @@ fun AlarmAppNavigation(addAlarmViewModel: AddAlarmViewModel, alarmsViewModel: Al
 
                     is RouteRingtone -> NavEntry(key) {
                         RingtoneSettingsScreen(addAlarmViewModel, backStack)
+                    }
+
+                    is RouteAbout -> NavEntry(key) {
+                        About()
+                    }
+
+                    is RouteSettings -> NavEntry(key) {
+                        Settings(backStack)
+                    }
+
+                    is RouteTermsOfUse -> NavEntry(key) {
+                        TermsOfUse()
+                    }
+
+                    is RoutePrivacyPolicy -> NavEntry(key) {
+                        PrivacyPolicy()
                     }
 
                     else -> {
