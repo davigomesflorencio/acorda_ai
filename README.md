@@ -43,25 +43,27 @@ This project serves as a practical demonstration of **Material 3 Expressive** an
 ## Preview
 
 <div align="center">
-  <img src="screenshots/screen_shoot_1_alarm_wear_app.png" width="230"/>
-  <img src="screenshots/screen_shoot_2_alarm_wear_app.png" width="230"/>
-  <img src="screenshots/screen_shoot_3_alarm_wear_app.png" width="230"/>
+  <img src="screenshots/v1.5.0/1.png" width="230"/>
+  <img src="screenshots/v1.5.0/2.png" width="230"/>
+  <img src="screenshots/v1.5.0/3.png" width="230"/>
 </div>
 
 <div align="center">
-  <img src="screenshots/screen_shoot_4_alarm_wear_app.png" width="230"/>
-  <img src="screenshots/screen_shoot_5_alarm_wear_app.png" width="230"/>
-  <img src="screenshots/screen_shoot_6_alarm_wear_app.png" width="230"/>
+  <img src="screenshots/v1.5.0/4.png" width="230"/>
+  <img src="screenshots/v1.5.0/5.png" width="230"/>
+  <img src="screenshots/v1.5.0/6.png" width="230"/>
 </div>
 
 <div align="center">
-  <img src="screenshots/screen_shoot_7_alarm_wear_app.png" width="230"/>
-  <img src="screenshots/screen_shoot_8_alarm_wear_app.png" width="230"/>
-  <img src="screenshots/screen_shoot_9_alarm_wear_app.png" width="230"/>
+  <img src="screenshots/v1.5.0/7.png" width="230"/>
+  <img src="screenshots/v1.5.0/8.png" width="230"/>
+  <img src="screenshots/v1.5.0/9.png" width="230"/>
 </div>
 
 <div align="center">
-  <img src="screenshots/screen_shoot_10_alarm_wear_app.png" width="230"/>
+  <img src="screenshots/v1.5.0/10.png" width="230"/>
+  <img src="screenshots/v1.5.0/11.png" width="230"/>
+  <img src="screenshots/v1.5.0/12.png" width="230"/>
 </div>
 
 ## Building the Project
