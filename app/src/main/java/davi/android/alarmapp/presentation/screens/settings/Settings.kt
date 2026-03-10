@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectableGroup
@@ -148,7 +147,7 @@ fun Settings(
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     Text(
-                        text = stringResource(R.string.app_version, "1.5.1"), // Replace "1.0.0" with BuildConfig.VERSION_NAME if available
+                        text = stringResource(R.string.app_version, "1.5.4"),
                         modifier = Modifier.fillMaxWidth()
                     )
                 }

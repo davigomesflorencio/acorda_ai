@@ -12,13 +12,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.wear.compose.foundation.lazy.AutoCenteringParams
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import davi.android.alarmapp.R
+import davi.android.alarmapp.presentation.theme.AlarmAppTheme
 
 @Composable
 fun About() {
@@ -31,8 +35,9 @@ fun About() {
             state = state,
             modifier = Modifier
                 .fillMaxSize()
+                .padding(contentPadding)
                 .selectableGroup(),
-            autoCentering = null,
+            autoCentering = AutoCenteringParams(itemIndex = 0),
             contentPadding = contentPadding,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -61,5 +66,16 @@ fun About() {
                 )
             }
         }
+    }
+}
+
+@Preview(
+    device = Devices.WEAR_OS_SMALL_ROUND,
+    showBackground = true
+)
+@Composable
+fun PreviewAbout() {
+    AlarmAppTheme {
+        About()
     }
 }

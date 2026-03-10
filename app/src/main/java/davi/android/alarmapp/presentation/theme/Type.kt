@@ -4,6 +4,7 @@ import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.googlefonts.Font
 import androidx.compose.ui.text.googlefonts.GoogleFont
+import androidx.compose.ui.unit.sp
 import davi.android.alarmapp.R
 
 val provider = GoogleFont.Provider(
@@ -42,7 +43,7 @@ val TypographyAcordai = Typography(
     bodyLarge = baseline.bodyLarge.copy(fontFamily = bodyFontFamily),
     bodyMedium = baseline.bodyMedium.copy(fontFamily = bodyFontFamily),
     bodySmall = baseline.bodySmall.copy(fontFamily = bodyFontFamily),
-    labelLarge = baseline.labelLarge.copy(fontFamily = bodyFontFamily),
-    labelMedium = baseline.labelMedium.copy(fontFamily = bodyFontFamily),
-    labelSmall = baseline.labelSmall.copy(fontFamily = bodyFontFamily),
+    labelLarge = baseline.labelLarge.copy(fontFamily = bodyFontFamily, fontSize = 12.sp),
+    labelMedium = baseline.labelMedium.copy(fontFamily = bodyFontFamily, fontSize = 10.sp),
+    labelSmall = baseline.labelSmall.copy(fontFamily = bodyFontFamily, fontSize = 8.sp),
 )
