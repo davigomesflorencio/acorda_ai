@@ -21,6 +21,7 @@ import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
+import androidx.wear.tooling.preview.devices.WearDevices
 import davi.android.alarmapp.R
 import davi.android.alarmapp.presentation.theme.AlarmAppTheme
 
@@ -70,7 +71,7 @@ fun About() {
 }
 
 @Preview(
-    device = Devices.WEAR_OS_SMALL_ROUND,
+    device = WearDevices.SMALL_ROUND,
     showBackground = true
 )
 @Composable
