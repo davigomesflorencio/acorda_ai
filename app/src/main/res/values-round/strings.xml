@@ -34,5 +34,5 @@
     <string name="sat">SAT</string>
     <string name="seg">SEG</string>
     <string name="unknown_sound">Unknown Sound</string>
-    <string name="github">"GitHub "</string>
+    <string name="github">github.com/davigomesflorencio</string>
 </resources>

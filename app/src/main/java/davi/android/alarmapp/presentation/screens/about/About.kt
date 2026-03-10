@@ -28,9 +28,9 @@ fun About() {
         scrollState = state
     ) { contentPadding ->
         ScalingLazyColumn(
+            state = state,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(contentPadding)
                 .selectableGroup(),
             autoCentering = null,
             contentPadding = contentPadding,

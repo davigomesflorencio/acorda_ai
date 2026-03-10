@@ -2,14 +2,18 @@ package davi.android.alarmapp.presentation.screens.settings
 
 import android.content.Intent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Apps
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.PrivacyTip
 import androidx.compose.material.icons.filled.StarRate
@@ -20,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,9 +52,9 @@ fun Settings(
         scrollState = state
     ) { contentPadding ->
         ScalingLazyColumn(
+            state = state,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(contentPadding)
                 .selectableGroup(),
             autoCentering = null,
             contentPadding = contentPadding,
@@ -143,7 +148,7 @@ fun Settings(
                     )
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     Text(
-                        text = stringResource(R.string.app_version, "1.0.0"), // Replace "1.0.0" with BuildConfig.VERSION_NAME if available
+                        text = stringResource(R.string.app_version, "1.5.1"), // Replace "1.0.0" with BuildConfig.VERSION_NAME if available
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -225,6 +230,25 @@ fun Settings(
                     Text(
                         stringResource(R.string.portfolio), // Assuming you have a portfolio string resource
                         style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
+            item {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(top = 15.dp)
+                ) {
+                    Icon(
+                        Icons.Default.Favorite,
+                        contentDescription = "Dev Name",
+                        tint = Color.Red,
+                        modifier = Modifier.size(ButtonDefaults.SmallIconSize)
+                    )
+                    Spacer(Modifier.size(6.dp))
+                    Text(
+                        "Developer Xing.DEV",
+                        style = MaterialTheme.typography.labelSmall
                     )
                 }
             }

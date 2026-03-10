@@ -28,6 +28,7 @@ fun TermsOfUse() {
         scrollState = state
     ) { contentPadding ->
         ScalingLazyColumn(
+            state = state,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)

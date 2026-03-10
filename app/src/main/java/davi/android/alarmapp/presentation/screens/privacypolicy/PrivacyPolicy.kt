@@ -28,6 +28,7 @@ fun PrivacyPolicy() {
         scrollState = state
     ) { contentPadding ->
         ScalingLazyColumn(
+            state = state,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)

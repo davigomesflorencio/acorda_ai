@@ -98,8 +98,8 @@
 
         If you have any questions about these Terms of Use, please contact us by email: 📧 davigomesflorencio@gmail.com
     </string>
-    <string name="github">GitHub</string>
-    <string name="portfolio">Portfolio - Davi Gomes Florencio</string>
+    <string name="github">github.com/davigomesflorencio</string>
+    <string name="portfolio">davigomesflorencio.com.br</string>
     <string name="permission_alarm_exact_necessary">Exact Alarm Permission Necessary</string>
     <string name="text_dialog_permission_alarm_exact">Your alarm application needs permission to schedule exact alarms to function correctly. Please grant this permission in system settings.</string>
     <string name="go_settings">Go to Settings</string>
