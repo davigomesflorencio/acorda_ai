@@ -7,7 +7,7 @@ fun injectMobileFeature() = loadFeature
 private val loadFeature by lazy {
     loadKoinModules(
         listOf(
-            databaseModule, repositoryModule, viewModelModule, serviceModule, workerModule
+            databaseModule, repositoryModule, useCaseModule, viewModelModule, serviceModule, workerModule
         )
     )
 }

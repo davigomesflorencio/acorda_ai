@@ -7,6 +7,6 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModel { AddAlarmViewModel(androidApplication(), get()) }
-    viewModel { AlarmsViewModel(androidApplication(), get()) }
+    viewModel { AddAlarmViewModel(androidApplication(), get(), get()) }
+    viewModel { AlarmsViewModel(androidApplication(), get(), get(), get(), get()) }
 }

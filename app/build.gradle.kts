@@ -64,14 +64,30 @@ android {
             }
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
+
+    sourceSets{
+        getByName("main") .java.srcDirs("src/main/java")
+        getByName("test") .java.srcDirs("src/test/java")
+        getByName("androidTest") .java.srcDirs("src/androidTest/java")
+    }
+
     useLibrary("wear-sdk")
+
     buildFeatures {
         compose = true
     }
@@ -113,9 +129,13 @@ dependencies {
     implementation(libs.compose.material3)
     androidTestImplementation(platform(libs.compose.bom))
 
-    implementation("com.microsoft.clarity:clarity-compose:3.+")
-
     androidTestImplementation(libs.ui.test.junit4)
+    testImplementation(platform(libs.compose.bom))
+    testImplementation(libs.ui.test.junit4)
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.kotlinx.coroutines.test)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 }
